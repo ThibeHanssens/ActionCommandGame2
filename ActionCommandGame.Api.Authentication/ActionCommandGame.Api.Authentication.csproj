@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Identity.Stores" Version="9.0.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ActionCommandGame.Abstractions\ActionCommandGame.Abstractions.csproj" />
+    <ProjectReference Include="..\ActionCommandGame.Api.Authentication.Model\ActionCommandGame.Api.Authentication.Model.csproj" />
+    <ProjectReference Include="..\ActionCommandGame.Services.Abstractions\ActionCommandGame.Services.Abstractions.csproj" />
+    <ProjectReference Include="..\ActionCommandGame.Services.Model\ActionCommandGame.Services.Model.csproj" />
+  </ItemGroup>
+
+</Project>

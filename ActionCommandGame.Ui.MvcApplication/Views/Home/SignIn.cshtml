@@ -1,0 +1,16 @@
+﻿@model ActionCommandGame.Services.Model.Requests.UserSignInRequest
+
+<div asp-validation-summary="All"></div>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Email" class="form-label">Email address</label>
+        <input type="email" class="form-control" asp-for="Email" aria-describedby="emailHelp">
+        <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Password" class="form-label">Password</label>
+        <input type="password" class="form-control" asp-for="Password">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
