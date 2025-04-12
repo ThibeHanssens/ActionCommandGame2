@@ -1,0 +1,14 @@
+﻿@page "/"
+@layout MinimalLayout
+@using Microsoft.Extensions.Options
+@using ActionCommandGame.BlazorApp.Settings
+@inject IOptions<AppSettings> AppSettings
+
+<div class="landing-page text-center">
+    <h2>Welcome to @AppSettings.Value.GameName</h2>
+    <p>Select "Login" or "Register" to start your mining adventure!</p>
+    <div class="buttons">
+        <a href="@AppRoutes.Account.SignIn" class="btn btn-primary me-2">Login</a>
+        <a href="@AppRoutes.Account.Register" class="btn btn-secondary">Register</a>
+    </div>
+</div>

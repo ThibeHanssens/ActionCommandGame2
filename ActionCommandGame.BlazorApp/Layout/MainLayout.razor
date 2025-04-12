@@ -1,0 +1,24 @@
+﻿@inherits LayoutComponentBase
+@using Microsoft.Extensions.Options
+@using ActionCommandGame.BlazorApp.Settings
+@inject IOptions<AppSettings> AppSettings
+
+<div class="main-layout">
+    <header class="header">
+        <div class="container">
+            <h1 class="site-title">@AppSettings.Value.GameName</h1>
+        </div>
+    </header>
+
+    <NavMenu />
+
+    <main class="content container">
+        @Body
+    </main>
+
+    <footer class="footer text-center">
+        <div class="container">
+            &copy; @DateTime.Now.Year - @AppSettings.Value.GameName
+        </div>
+    </footer>
+</div>

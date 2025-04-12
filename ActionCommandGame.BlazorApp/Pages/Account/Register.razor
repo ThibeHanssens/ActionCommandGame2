@@ -1,0 +1,42 @@
+﻿@page "/account/register"
+@layout MinimalLayout
+@using ActionCommandGame.Services.Model.Requests
+@inject NavigationManager NavigationManager
+
+<div class="register-page container">
+    <h2>Register</h2>
+    <EditForm Model="@registerModel" OnValidSubmit="HandleRegister">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+        <div class="form-group mb-3">
+            <label for="email">Email</label>
+            <InputText id="email" @bind-Value="registerModel.Email" class="form-control" />
+        </div>
+        <div class="form-group mb-3">
+            <label for="password">Password</label>
+            <InputText id="password" type="password" @bind-Value="registerModel.Password" class="form-control" />
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Register</button>
+    </EditForm>
+    <div class="mt-3">
+        <small>Already have an account? <a href="@AppRoutes.Account.SignIn">Login here</a>.</small>
+    </div>
+</div>
+
+@code {
+    private UserRegistrationRequest registerModel = new UserRegistrationRequest
+        {
+            Email = string.Empty,
+            Password = string.Empty
+        };
+
+    private async Task HandleRegister()
+    {
+        // TODO: Implement registration logic using IdentityService.
+        NavigationManager.NavigateTo(AppRoutes.Player.PlayerSelection);
+
+        // Add an await so that the method is truly asynchronous.
+        await Task.CompletedTask;
+    }
+}
+

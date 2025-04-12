@@ -1,0 +1,128 @@
+/* Minimal Layout Styles */
+.minimal-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #1b1b1b;
+    color: #e0e0e0;
+}
+
+    .minimal-layout .header {
+        background-color: #2c2c2c;
+        padding: 1rem 0;
+        border-bottom: 1px solid #444;
+    }
+
+    .minimal-layout .site-title {
+        margin: 0;
+        text-align: center;
+        font-family: Georgia, serif;
+        color: #f2d048;
+    }
+
+    .minimal-layout .content {
+        flex: 1;
+        padding: 2rem 0;
+    }
+
+    .minimal-layout .footer {
+        background-color: #2c2c2c;
+        padding: 1rem 0;
+        border-top: 1px solid #444;
+        font-size: 0.9rem;
+    }
+
+/* Main Layout Styles */
+.main-layout {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background-color: #1b1b1b;
+    color: #e0e0e0;
+}
+
+    .main-layout .header {
+        background-color: #2c2c2c;
+        padding: 1rem 0;
+        border-bottom: 1px solid #444;
+    }
+
+    .main-layout .site-title {
+        margin: 0;
+        text-align: center;
+        font-family: Georgia, serif;
+        color: #f2d048;
+    }
+
+    .main-layout .content {
+        flex: 1;
+        padding: 2rem 0;
+    }
+
+    .main-layout .footer {
+        background-color: #2c2c2c;
+        padding: 1rem 0;
+        border-top: 1px solid #444;
+        font-size: 0.9rem;
+    }
+
+/* NavMenu Styles */
+.navmenu {
+    background-color: #333;
+    padding: 0.5rem 0;
+}
+
+    .navmenu .nav-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+    }
+
+    .navmenu .nav-item {
+        margin: 0 1rem;
+    }
+
+    .navmenu .nav-link {
+        color: #e0e0e0;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.1rem;
+    }
+
+        .navmenu .nav-link.active,
+        .navmenu .nav-link:hover {
+            color: #f2d048;
+            text-decoration: underline;
+        }
+
+/* Landing Page Styles */
+.landing-page {
+    padding: 3rem 0;
+    text-align: center;
+}
+
+    .landing-page .buttons a.btn {
+        min-width: 140px;
+        font-size: 1.1rem;
+    }
+
+/* Login and Register Page Styles */
+.login-page,
+.register-page {
+    max-width: 400px;
+    margin: 3rem auto;
+}
+
+    .login-page h2,
+    .register-page h2 {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+
+/* Player Selection Page Styles */
+.player-selection {
+    padding: 3rem 0;
+    text-align: center;
+}

@@ -47,6 +47,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActionCommandGame.Api.Authe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ActionCommandGame.Ui.MvcApplication", "ActionCommandGame.Ui.MvcApplication\ActionCommandGame.Ui.MvcApplication.csproj", "{5D3A09E4-6535-4E9B-9A6D-5B66CFABB0F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ActionCommandGame.BlazorApp", "ActionCommandGame.BlazorApp\ActionCommandGame.BlazorApp.csproj", "{078C3199-4E47-42CE-946B-1EABB541022B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -117,6 +119,10 @@ Global
 		{5D3A09E4-6535-4E9B-9A6D-5B66CFABB0F0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5D3A09E4-6535-4E9B-9A6D-5B66CFABB0F0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D3A09E4-6535-4E9B-9A6D-5B66CFABB0F0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{078C3199-4E47-42CE-946B-1EABB541022B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{078C3199-4E47-42CE-946B-1EABB541022B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{078C3199-4E47-42CE-946B-1EABB541022B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{078C3199-4E47-42CE-946B-1EABB541022B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -138,6 +144,7 @@ Global
 		{343D36DA-B068-4C01-AEE8-160A8423AE68} = {22A8CF6D-C62B-4DB6-9C86-576AED75704B}
 		{84A83AB7-43DB-4CCE-B30D-E3A26B9F697E} = {119E338A-E51B-4058-8855-1E6CC59351F3}
 		{5D3A09E4-6535-4E9B-9A6D-5B66CFABB0F0} = {FC172E5F-1E61-488B-9934-91D1C73AFD45}
+		{078C3199-4E47-42CE-946B-1EABB541022B} = {FC172E5F-1E61-488B-9934-91D1C73AFD45}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AF43B065-5545-4453-A97F-781AE33CE7DC}
