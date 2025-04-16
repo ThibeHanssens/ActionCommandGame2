@@ -2,9 +2,14 @@
 @layout MinimalLayout
 @using ActionCommandGame.Services.Model.Requests
 @inject NavigationManager NavigationManager
+@inject IdentityService IdentityService
 
 <div class="register-page container">
     <h2>Register</h2>
+    @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+    {
+        <div class="alert alert-danger">@ErrorMessage</div>
+    }
     <EditForm Model="@registerModel" OnValidSubmit="HandleRegister">
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -24,19 +29,49 @@
 </div>
 
 @code {
+    // Initialize the model so that required properties are set.
     private UserRegistrationRequest registerModel = new UserRegistrationRequest
         {
             Email = string.Empty,
             Password = string.Empty
         };
 
+    private string ErrorMessage = string.Empty;
+
     private async Task HandleRegister()
     {
-        // TODO: Implement registration logic using IdentityService.
-        NavigationManager.NavigateTo(AppRoutes.Player.PlayerSelection);
+        // Client-side validation for the password requirements.
+        if (!IsValidPassword(registerModel.Password))
+        {
+            ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, and one digit.";
+            return;
+        }
 
-        // Add an await so that the method is truly asynchronous.
-        await Task.CompletedTask;
+        // Call the IdentityService to register the user.
+        var result = await IdentityService.RegisterAsync(registerModel);
+
+        if (!result.Success)
+        {
+            // Display the error messages above the form.
+            ErrorMessage = string.Join(" ", result.Errors ?? new List<string>());
+            return;
+        }
+
+        // Clear error message and navigate to player selection.
+        ErrorMessage = string.Empty;
+        NavigationManager.NavigateTo(AppRoutes.Player.PlayerSelection);
+    }
+
+    // Returns true if the password contains at least one uppercase, one lowercase letter, and one digit.
+    private bool IsValidPassword(string password)
+    {
+        if (string.IsNullOrEmpty(password))
+            return false;
+
+        bool hasUpper = password.Any(char.IsUpper);
+        bool hasLower = password.Any(char.IsLower);
+        bool hasDigit = password.Any(char.IsDigit);
+
+        return hasUpper && hasLower && hasDigit;
     }
 }
-

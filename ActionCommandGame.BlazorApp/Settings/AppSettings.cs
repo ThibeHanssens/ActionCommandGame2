@@ -1,4 +1,5 @@
-﻿namespace ActionCommandGame.BlazorApp.Settings
+﻿
+namespace ActionCommandGame.BlazorApp.Settings
 {
     public class AppSettings
     {

@@ -24,6 +24,9 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 var apiSettings = new ApiSettings();
 builder.Configuration.GetSection(nameof(ApiSettings)).Bind(apiSettings);
 
+// Register AppSettings in DI so that IOptions<AppSettings> gets the values from appsettings.json.
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
+
 // Check that the BaseUrl is configured.
 if (string.IsNullOrWhiteSpace(apiSettings.BaseUrl))
 {

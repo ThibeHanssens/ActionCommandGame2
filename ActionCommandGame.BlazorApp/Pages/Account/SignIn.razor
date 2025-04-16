@@ -2,9 +2,14 @@
 @layout MinimalLayout
 @using ActionCommandGame.Services.Model.Requests
 @inject NavigationManager NavigationManager
+@inject IdentityService IdentityService
 
 <div class="login-page container">
     <h2>Login</h2>
+    @if (!string.IsNullOrWhiteSpace(ErrorMessage))
+    {
+        <div class="alert alert-danger">@ErrorMessage</div>
+    }
     <EditForm Model="@loginModel" OnValidSubmit="HandleLogin">
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -24,19 +29,29 @@
 </div>
 
 @code {
+    // Initialize the model so that required properties are set.
     private UserSignInRequest loginModel = new UserSignInRequest
         {
             Email = string.Empty,
             Password = string.Empty
         };
 
+    private string ErrorMessage = string.Empty;
+
     private async Task HandleLogin()
     {
-        // TODO: Implement authentication logic using IdentityService.
-        NavigationManager.NavigateTo(AppRoutes.Player.PlayerSelection);
+        // Call the IdentityService to sign the user in.
+        var result = await IdentityService.SignInAsync(loginModel);
 
-        // Add an await so that the method is truly asynchronous.
-        await Task.CompletedTask;
+        if (!result.Success)
+        {
+            // Display backend error messages above the form.
+            ErrorMessage = string.Join(" ", result.Errors ?? new List<string>());
+            return;
+        }
+
+        // Clear error and navigate to player selection.
+        ErrorMessage = string.Empty;
+        NavigationManager.NavigateTo(AppRoutes.Player.PlayerSelection);
     }
 }
-
