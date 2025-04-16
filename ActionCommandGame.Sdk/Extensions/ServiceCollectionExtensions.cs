@@ -23,10 +23,10 @@ public static class ServiceCollectionExtensions
                 c.BaseAddress = baseUri;
             });
 
-        services.AddTransient<IGameService, GameApi>();
-        services.AddTransient<IPlayerService, PlayerApi>();
-        services.AddTransient<IItemService, ItemApi>();
-        services.AddTransient<IPlayerItemService, PlayerItemApi>();
-        services.AddTransient<IIdentityService<AuthenticationResult>, IdentityApi>();
+        services.AddTransient<IGameService, GameSdk>();
+        services.AddTransient<IPlayerService, PlayerSdk>();
+        services.AddTransient<IItemService, ItemSdk>();
+        services.AddTransient<IPlayerItemService, PlayerItemSdk>();
+        services.AddTransient<IIdentityService<AuthenticationResult>, IdentitySdk>();
     }
 }

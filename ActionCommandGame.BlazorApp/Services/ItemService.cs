@@ -6,9 +6,9 @@ namespace ActionCommandGame.BlazorApp.Services
 {
     public class ItemService
     {
-        private readonly ItemApi _sdk;
+        private readonly ItemSdk _sdk;
 
-        public ItemService(ItemApi sdk)
+        public ItemService(ItemSdk sdk)
         {
             _sdk = sdk;
         }

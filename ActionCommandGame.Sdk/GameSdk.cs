@@ -7,12 +7,12 @@ using ActionCommandGame.Services.Model.Results;
 
 namespace ActionCommandGame.Sdk
 {
-    public class GameApi: IGameService
+    public class GameSdk: IGameService
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ITokenStore _tokenStore;
 
-        public GameApi(IHttpClientFactory httpClientFactory, ITokenStore tokenStore)
+        public GameSdk(IHttpClientFactory httpClientFactory, ITokenStore tokenStore)
         {
             _httpClientFactory = httpClientFactory;
             _tokenStore = tokenStore;
