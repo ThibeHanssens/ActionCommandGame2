@@ -1,23 +1,26 @@
-﻿/* ─── GLOBAL PAGE RESET ───────────────────────────────────────────── */
+﻿/* ─── GLOBAL RESET & THEME COLORS ───────────────────────────────── */
 html, body {
     margin: 0;
     padding: 0;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background: #1b1b1b;
+    background: #1f1310; /* deep mine‑shaft brown */
     color: #e0e0e0;
 }
 
-/* ─── MINIMAL LAYOUT (login/register/index) ───────────────────────── */
+/* ─── MINIMAL LAYOUT ─────────────────────────────────────────────── */
 .minimal-layout {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
+    .minimal-layout .content {
+        flex: 1;
+    }
 
     .minimal-layout .header {
-        background: #2c2c2c;
+        background: #3c2b1e; /* dark earthy brown */
         padding: 1rem 0;
-        border-bottom: 2px solid #555;
+        border-bottom: 2px solid #5a442e;
     }
 
     .minimal-layout .site-title {
@@ -27,30 +30,32 @@ html, body {
         color: #d4af37; /* metallic gold accent */
     }
 
-    .minimal-layout .content {
-        flex: 1;
-        padding: 2rem 0;
+/* ensure your little “login/register here” link is gold */
+.login-page small a,
+.register-page small a {
+    color: #d4af37;
+    text-decoration: none;
+}
+
+    .login-page small a:hover,
+    .register-page small a:hover {
+        text-decoration: underline;
     }
 
-    .minimal-layout .footer {
-        background: #2c2c2c;
-        padding: 1rem 0;
-        border-top: 2px solid #555;
-        text-align: center;
-        font-size: 0.9rem;
-    }
-
-/* ─── MAIN LAYOUT (after login) ──────────────────────────────────── */
+/* ─── MAIN LAYOUT ──────────────────────────────────────────────── */
 .main-layout {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
+    .main-layout .content {
+        flex: 1;
+    }
 
     .main-layout .header {
-        background: linear-gradient(135deg, #3e3e3e, #1b1b1b);
+        background: linear-gradient(135deg, #4b3728, #2f1e16);
         padding: 1rem 0;
-        border-bottom: 2px solid #555;
+        border-bottom: 2px solid #5a442e;
     }
 
     .main-layout .site-title {
@@ -60,23 +65,13 @@ html, body {
         color: #d4af37;
     }
 
-    .main-layout .content {
-        flex: 1;
-        padding: 2rem 0;
-    }
-
-    .main-layout .footer {
-        background: #2c2c2c;
-        padding: 1rem 0;
-        border-top: 2px solid #555;
-        text-align: center;
-        font-size: 0.9rem;
-    }
-
-/* ─── NAV MENU ───────────────────────────────────────────────────── */
+/* ─── NAV MENU ─────────────────────────────────────────────────── */
 .navmenu {
-    background: #262626;
+    background: linear-gradient(135deg, #4b3728, #2f1e16);
+    /*background: #3c2b1e;*/
     padding: 0.5rem 0;
+    border-top: 2px solid #5a442e;
+    border-bottom: 2px solid #5a442e;
 }
 
 .nav-inner {
@@ -90,30 +85,78 @@ html, body {
     margin: 0;
     padding: 0;
     display: flex;
-    gap: 1.5rem;
 }
 
-.nav-link {
-    color: #e0e0e0;
-    text-decoration: none;
-    font-weight: bold;
-    font-size: 1.1rem;
-}
-
-    .nav-link.active,
-    .nav-link:hover {
-        color: #d4af37;
-        text-decoration: underline;
+    /* make each link the same height, inline‑centered, no underline */
+    .nav-list .nav-link {
+        display: inline-flex;
+        align-items: center;
+        padding: 0 1rem;
+        height: 3rem;
+        color: #e0e0e0;
+        text-decoration: none;
+        font-weight: bold;
+        font-size: 1.1rem;
     }
 
-/* profile icon on right */
-.profile-link {
-    display: inline-block;
+        .nav-list .nav-link:hover,
+        .nav-list .nav-link.active {
+            /* no underline */
+            text-decoration: none;
+            color: #d4af37;
+            background: transparent;
+        }
+
+/* ─── FOOTER ───────────────────────────────────────────────────── */
+.footer {
+    padding: 1rem 0;
+    color: #ffffff; /* pure white text */
 }
 
+    /* container that holds left+right */
+    .footer .footer-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+/* dark‑brown band to match nav/header */
+.minimal-layout .footer {
+    background: #3c2b1e;
+    border-top: 2px solid #5a442e;
+}
+
+.main-layout .footer {
+    /* same gradient as your header */
+    background: linear-gradient(135deg, #4b3728, #2f1e16);
+    border-top: 2px solid #5a442e;
+}
+
+.footer-left,
+.footer-right {
+    font-size: 0.9rem;
+    color: #ffffff;
+}
+
+
+/* ─── PROFILE BUTTON ───────────────────────────────────────────── */
+.profile-link {
+    display: inline-flex;
+    align-items: center;
+    text-decoration: none;
+}
+    .profile-link:hover,
+    .profile-link:focus,
+    .profile-link:visited {
+        text-decoration: none;
+    }
+    .profile-link:focus {
+        outline: none;
+    }
+
 .profile-icon {
-    width: 1.8rem;
-    height: 1.8rem;
+    width: 2rem;
+    height: 2rem;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid transparent;
@@ -126,25 +169,92 @@ html, body {
 
 .profile-text {
     margin-left: 0.5rem;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
     color: #e0e0e0;
     transition: color 0.2s ease;
+    text-decoration: none;
 }
 
 .profile-link:hover .profile-text {
     color: #d4af37;
+    text-decoration: none;
 }
 
-/* ─── FORM PAGES ────────────────────────────────────────────────── */
-.login-page,
-.register-page {
-    max-width: 400px;
-    margin: 3rem auto;
+/* ─── LOADING ─────────────────────────────────────────────────── */
+.loading-container {
+    text-align: center;
 }
-    .login-page h2,
-    .register-page h2 {
-        text-align: center;
-        margin-bottom: 1.5rem;
+
+.loading-pickaxe {
+    display: block;
+    width: 8rem;
+    height: 8rem;
+    margin: 20vh auto 1rem;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
     }
 
-/* keep your existing app.css overrides for forms, validation, etc. */
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading-percentage {
+    font-weight: bold;
+    font-size: 1.25rem;
+    color: #d4af37;
+}
+
+    .loading-percentage::after {
+        content: var(--blazor-load-percentage-text, "Loading...");
+    }
+
+
+/* ─── BUTTONS ─────────────────────────────────────────────────── */
+.btn-primary {
+    background-color: #d4af37;
+    border-color: #c0a130;
+    color: #1f1310;
+}
+
+    .btn-primary:hover,
+    .btn-primary:focus {
+        background-color: #c0a130;
+        border-color: #a88f2e;
+    }
+
+.btn-secondary {
+    color: #d4af37;
+    background: transparent;
+    border: 1px solid #d4af37;
+}
+
+    .btn-secondary:hover {
+        background-color: #d4af37;
+        color: #1f1310;
+    }
+
+/* ─── PAGE‑SPECIFIC CONTAINERS ───────────────────────────────── */
+.landing-page,
+.login-page,
+.register-page,
+.profile-page,
+.player-selection-page,
+.shop-page {
+    max-width: 600px;
+    margin: 3rem auto;
+    text-align: center;
+}
+
+    .landing-page h2,
+    .login-page h2,
+    .register-page h2,
+    .profile-page h2,
+    .player-selection-page h2,
+    .shop-page h2 {
+        margin-bottom: 1.5rem;
+    }

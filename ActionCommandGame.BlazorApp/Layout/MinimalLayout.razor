@@ -14,9 +14,14 @@
         @Body
     </main>
 
-    <footer class="footer text-center">
-        <div class="container">
-            &copy; @DateTime.Now.Year - @AppSettings.Value.GameName
+    <footer class="footer">
+        <div class="container footer-inner">
+            <span class="footer-left">
+                &copy; @DateTime.Now.Year - @AppSettings.Value.GameName
+            </span>
+            <span class="footer-right">
+                by @AppSettings.Value.CreatorName
+            </span>
         </div>
     </footer>
 </div>

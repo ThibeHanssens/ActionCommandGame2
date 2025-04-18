@@ -5,6 +5,7 @@ namespace ActionCommandGame.BlazorApp.Settings
     {
         public string? CommandPromptText { get; set; }
         public string? GameName { get; set; }
+        public string? CreatorName { get; set; }
         public string? ActionCommand { get; set; }
         public string? ActionText { get; set; }
     }
