@@ -1,8 +1,9 @@
 ﻿namespace ActionCommandGame.Services.Model.Results
 {
-    public class BuyResult
+    public class UserProfileResult
     {
-        public PlayerResult Player { get; set; } = null!;
-        public ItemResult Item { get; set; } = null!;
+        public string UserName { get; set; } = default!;
+        public string Email { get; set; } = default!;
+        public string? PhoneNumber { get; set; }
     }
 }

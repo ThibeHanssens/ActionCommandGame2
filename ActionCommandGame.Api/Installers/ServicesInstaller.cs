@@ -14,6 +14,7 @@ namespace ActionCommandGame.Api.Installers
             services.AddTransient<IItemService, ItemService>();
             services.AddTransient<IPlayerService, PlayerService>();
             services.AddTransient<IPlayerItemService, PlayerItemService>();
+            services.AddTransient<IProfileService, ProfileService>();
         }
     }
 }

@@ -4,7 +4,9 @@ using System.Text;
 using ActionCommandGame.Api.Authentication.Model;
 using ActionCommandGame.Api.Authentication.Settings;
 using ActionCommandGame.Services.Abstractions;
+using ActionCommandGame.Services.Model.Core;
 using ActionCommandGame.Services.Model.Requests;
+using ActionCommandGame.Services.Model.Results;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
@@ -22,7 +24,8 @@ namespace ActionCommandGame.Api.Authentication
 			_userManager = userManager;
 			_jwtSettings = jwtSettings;
 		}
-		public async Task<AuthenticationResult> Register(UserRegistrationRequest request)
+
+        public async Task<AuthenticationResult> Register(UserRegistrationRequest request)
 		{
 			var user = await _userManager.FindByEmailAsync(request.Email);
 			if (user is not null)

@@ -1,4 +1,10 @@
-﻿<nav class="navmenu">
+﻿@using Microsoft.AspNetCore.Components.Authorization
+@inject AuthenticationStateProvider AuthProvider
+@inject ITokenStore TokenStore
+@inject NavigationManager Nav
+
+
+<nav class="navmenu">
     <div class="container nav-inner">
         <ul class="nav-list">
             <li class="nav-item">
@@ -13,9 +19,28 @@
             </li>
         </ul>
 
-        <NavLink href="@AppRoutes.Account.Profile" class="profile-link">
-            <img src="Images/profile.webp" alt="My Profile" class="profile-icon" />
-            <span class="profile-text">Profile</span>
-        </NavLink>
+        <ul class="nav-list">
+            <li class="nav-item">
+                <NavLink href="@AppRoutes.Account.Profile" class="profile-link">
+                    <img src="Images/profile.webp" class="profile-icon" alt="Profile" />
+                    <span class="profile-text">Profile</span>
+                </NavLink>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-link profile-text" @onclick="Logout">Logout</button>
+            </li>
+        </ul>
     </div>
 </nav>
+
+
+@code {
+    private async Task Logout()
+    {
+        // Verwijder JWT, update auth‑state en ga naar login
+        await TokenStore.SaveTokenAsync(null);
+        (AuthProvider as ActionCommandGame.BlazorApp.Security.TokenAuthenticationStateProvider)
+            ?.AuthenticateUser();
+        Nav.NavigateTo(AppRoutes.Account.SignIn);
+    }
+}

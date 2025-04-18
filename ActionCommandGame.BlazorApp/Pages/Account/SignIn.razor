@@ -1,8 +1,13 @@
 ﻿@page "/account/sign-in"
+@attribute [AllowAnonymous]
 @layout MinimalLayout
+@using ActionCommandGame.BlazorApp.Security
+@using Microsoft.AspNetCore.Authorization
 @using ActionCommandGame.Services.Model.Requests
 @inject NavigationManager NavigationManager
 @inject IdentityService IdentityService
+@inject ITokenStore TokenStore
+@inject AuthenticationStateProvider AuthProvider
 
 <div class="login-page container">
     <h2>Login</h2>
@@ -38,6 +43,15 @@
 
     private string ErrorMessage = string.Empty;
 
+        protected override async Task OnInitializedAsync()
+    {
+        // clear any old token
+        await TokenStore.SaveTokenAsync(null);
+        // tell Blazor auth-state that we’re now logged out
+        (AuthProvider as TokenAuthenticationStateProvider)
+          ?.AuthenticateUser();
+    }
+
     private async Task HandleLogin()
     {
         // Call the IdentityService to sign the user in.
@@ -49,6 +63,10 @@
             ErrorMessage = string.Join(" ", result.Errors ?? new List<string>());
             return;
         }
+
+       //Notify Blazor that a token is present now
+        (AuthProvider as TokenAuthenticationStateProvider)?.AuthenticateUser();
+        await AuthProvider.GetAuthenticationStateAsync();
 
         // Clear error and navigate to player selection.
         ErrorMessage = string.Empty;

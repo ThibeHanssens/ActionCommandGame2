@@ -1,8 +1,13 @@
 ﻿@page "/"
+@attribute [AllowAnonymous]
 @layout MinimalLayout
+@using ActionCommandGame.BlazorApp.Security
+@using Microsoft.AspNetCore.Authorization
 @using Microsoft.Extensions.Options
 @using ActionCommandGame.BlazorApp.Settings
 @inject IOptions<AppSettings> AppSettings
+@inject ITokenStore TokenStore
+@inject AuthenticationStateProvider AuthProvider
 
 <div class="landing-page container">
     <h2>Welcome to @AppSettings.Value.GameName</h2>
@@ -12,3 +17,14 @@
         <a href="@AppRoutes.Account.Register" class="btn btn-secondary">Register</a>
     </div>
 </div>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        // clear any old token
+        await TokenStore.SaveTokenAsync(null);
+        // tell Blazor auth-state that we’re now logged out
+        (AuthProvider as TokenAuthenticationStateProvider)
+          ?.AuthenticateUser();
+    }
+}

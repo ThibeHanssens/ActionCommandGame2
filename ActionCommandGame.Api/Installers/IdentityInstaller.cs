@@ -13,6 +13,7 @@ namespace ActionCommandGame.Api.Installers
         {
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
+                options.User.RequireUniqueEmail = true;
                 options.Password.RequireDigit = true;
                 options.Password.RequireLowercase = true;
                 options.Password.RequireNonAlphanumeric = false;

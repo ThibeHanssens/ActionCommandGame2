@@ -44,6 +44,7 @@ builder.Services.AddScoped<GameSdk>();
 builder.Services.AddScoped<ItemSdk>();
 builder.Services.AddScoped<PlayerSdk>();
 builder.Services.AddScoped<PlayerItemSdk>();
+builder.Services.AddScoped<ProfileSdk>();
 
 // Add Blazored LocalStorage for secure token storage.
 builder.Services.AddBlazoredLocalStorage();
@@ -60,24 +61,32 @@ builder.Services.AddScoped<GameService>();
 builder.Services.AddScoped<ItemService>();
 builder.Services.AddScoped<PlayerService>();
 builder.Services.AddScoped<PlayerItemService>();
+builder.Services.AddScoped<ProfileService>();
 
 // Configure an HttpClient that automatically adds the JWT token to all API requests.
 // This configuration is useful for any additional HTTP calls you might make outside the SDK.
-builder.Services.AddScoped(sp =>
+//builder.Services.AddScoped(sp =>
+//{
+//    var client = new HttpClient { BaseAddress = new Uri(apiSettings.BaseUrl) };
+//    // Retrieve the token from your token store.
+//    //var token = sp.GetRequiredService<ITokenStore>().GetToken();
+//    var token = sp.GetRequiredService<ITokenStore>().GetTokenAsync().GetAwaiter().GetResult();
+//    Console.WriteLine($"API Base URL: {apiSettings.BaseUrl}");
+//    if (!string.IsNullOrWhiteSpace(token))
+//    {
+//        Console.WriteLine($"Token added to Authorization header: {token}");
+//        client.DefaultRequestHeaders.Authorization =
+//            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
+//    }
+//    return client;
+//});
+
+// register a named HttpClient for your API (no blocking, BaseAddress only)
+builder.Services.AddHttpClient("ActionCommandGame", client =>
 {
-    var client = new HttpClient { BaseAddress = new Uri(apiSettings.BaseUrl) };
-    // Retrieve the token from your token store.
-    //var token = sp.GetRequiredService<ITokenStore>().GetToken();
-    var token = sp.GetRequiredService<ITokenStore>().GetTokenAsync().GetAwaiter().GetResult();
-    Console.WriteLine($"API Base URL: {apiSettings.BaseUrl}");
-    if (!string.IsNullOrWhiteSpace(token))
-    {
-        Console.WriteLine($"Token added to Authorization header: {token}");
-        client.DefaultRequestHeaders.Authorization =
-            new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
-    }
-    return client;
+    client.BaseAddress = new Uri(apiSettings.BaseUrl);
 });
+
 
 // Build and run the application.
 await builder.Build().RunAsync();

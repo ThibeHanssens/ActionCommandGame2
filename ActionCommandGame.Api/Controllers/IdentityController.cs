@@ -1,7 +1,9 @@
 ﻿
+using System.Security.Claims;
 using ActionCommandGame.Api.Authentication.Model;
 using ActionCommandGame.Services.Abstractions;
 using ActionCommandGame.Services.Model.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ActionCommandGame.Api.Controllers
