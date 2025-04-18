@@ -1,8 +1,11 @@
 ﻿using ActionCommandGame.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ActionCommandGame.Api.Controllers
 {
+    [ApiController]
+    [Authorize]
     public class GameController : ApiBaseController
     {
         private readonly IGameService _gameService;

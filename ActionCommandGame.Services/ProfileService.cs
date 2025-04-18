@@ -28,17 +28,6 @@ namespace ActionCommandGame.Services
 
         public async Task<UserProfileResult?> GetProfileAsync()
         {
-            //// grab the "id" claim you issued in your JWT
-            //var userId = User.FindFirst("id")?.Value;
-            //if (string.IsNullOrEmpty(userId))
-            //    return Unauthorized();
-
-            //// extract userId from HttpContext
-            //var userId = _userManager.Context
-            //    .User?.FindFirst("id")?.Value;
-            //if (string.IsNullOrEmpty(userId))
-            //    return null;
-
             var userId = GetUserId();
             if (string.IsNullOrEmpty(userId))
                 return null;
@@ -57,11 +46,6 @@ namespace ActionCommandGame.Services
 
         public async Task<AuthenticationResult> UpdateProfileAsync(UserProfileUpdateRequest request)
         {
-            //var userId = _userManager.Context
-            //    .User?.FindFirst("id")?.Value;
-            //if (string.IsNullOrEmpty(userId))
-            //    return new AuthenticationResult { Errors = new[] { "Not authenticated" } };
-
             var userId = GetUserId();
             if (string.IsNullOrEmpty(userId))
                 return null;

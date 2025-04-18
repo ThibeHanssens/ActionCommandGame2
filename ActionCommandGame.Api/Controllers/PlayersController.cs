@@ -1,9 +1,12 @@
 ﻿using ActionCommandGame.Services.Abstractions;
 using ActionCommandGame.Services.Model.Filters;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ActionCommandGame.Api.Controllers
 {
+    [ApiController]
+    [Authorize]
     public class PlayersController : ApiBaseController
     {
         private readonly IPlayerService _playerService;
