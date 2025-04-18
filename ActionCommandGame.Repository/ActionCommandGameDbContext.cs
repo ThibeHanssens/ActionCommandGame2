@@ -29,7 +29,7 @@ namespace ActionCommandGame.Repository
 
         public async Task Initialize()
         {
-            var email = "bavo.ketels@vives.be";
+            var email = "thibe.hanssens@vives.be";
             //Password Test123$
             var passwordHash = "AQAAAAEAACcQAAAAECp9VnV5jgDyqQqacxkrC+OcWFUM1+mavZ4+mxxhqtm/dg9UTVq1vhgAKFsblrEXDA==";
             var user = new IdentityUser

@@ -12,7 +12,10 @@
             public const string SignIn = "/account/sign-in";
             public const string Register = "/account/register";
         }
-
+        public static class Game
+        {
+            public const string Shop = "/shop";
+        }
         public static class Player
         {
             public const string PlayerSelection = "/player-selection";

@@ -41,9 +41,10 @@
     private async Task HandleRegister()
     {
         // Client-side validation for the password requirements.
-        if (!IsValidPassword(registerModel.Password))
+        var pwdError = GetPasswordValidationError(registerModel.Password);
+        if (pwdError != null)
         {
-            ErrorMessage = "Password must contain at least one uppercase letter, one lowercase letter, and one digit.";
+            ErrorMessage = pwdError;
             return;
         }
 
@@ -62,16 +63,26 @@
         NavigationManager.NavigateTo(AppRoutes.Player.PlayerSelection);
     }
 
-    // Returns true if the password contains at least one uppercase, one lowercase letter, and one digit.
-    private bool IsValidPassword(string password)
+    /// <summary>
+    /// Returns null if the password is valid; otherwise returns a specific error message.
+    /// </summary>
+    private string? GetPasswordValidationError(string password)
     {
-        if (string.IsNullOrEmpty(password))
-            return false;
+        if (password?.Length < 6)
+            return "Password must contain at least 6 characters.";
 
-        bool hasUpper = password.Any(char.IsUpper);
-        bool hasLower = password.Any(char.IsLower);
-        bool hasDigit = password.Any(char.IsDigit);
+        var missing = new List<string>();
+        if (!password.Any(char.IsUpper)) missing.Add("one uppercase letter");
+        if (!password.Any(char.IsLower)) missing.Add("one lowercase letter");
+        if (!password.Any(char.IsDigit)) missing.Add("one digit");
 
-        return hasUpper && hasLower && hasDigit;
+        if (missing.Count == 0)
+            return null;
+
+        if (missing.Count == 1)
+            return $"Password must contain at least {missing[0]}.";
+        if (missing.Count == 2)
+            return $"Password must contain at least {missing[0]} and {missing[1]}.";
+        return $"Password must contain at least {missing[0]}, {missing[1]} and {missing[2]}.";
     }
 }

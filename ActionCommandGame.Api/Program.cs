@@ -1,8 +1,21 @@
-using ActionCommandGame.Api.Installers.Extensions;
+﻿using ActionCommandGame.Api.Installers.Extensions;
 using ActionCommandGame.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//Registreer CORS‑service
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowBlazorClient", policy =>
+    {
+        policy
+            .WithOrigins("https://localhost:7138")    // Blazor‑origin
+            .AllowAnyHeader()                         
+            .AllowAnyMethod()                         // allow GET/POST/etc
+            .AllowCredentials();                      // allow cookies/auth/etc
+    });
+});
 
 // Install services to the container using IInstaller classes.
 builder.Services.InstallServicesInAssembly(builder.Configuration);
@@ -25,6 +38,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowBlazorClient");
 
 app.UseAuthentication();
 app.UseAuthorization();
