@@ -11,14 +11,15 @@
         {
             public const string SignIn = "/account/sign-in";
             public const string Register = "/account/register";
+            public const string Profile = "/play/profile";
         }
         public static class Game
         {
-            public const string Shop = "/shop";
+            public const string Shop = "/play/shop";
         }
         public static class Player
         {
-            public const string PlayerSelection = "/player-selection";
+            public const string PlayerSelection = "/play/player-selection";
         }
     }
 }

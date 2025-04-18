@@ -1,5 +1,5 @@
 ﻿<nav class="navmenu">
-    <div class="container">
+    <div class="container nav-inner">
         <ul class="nav-list">
             <li class="nav-item">
                 <NavLink href="@AppRoutes.Player.PlayerSelection" class="nav-link" Match="NavLinkMatch.All">
@@ -11,7 +11,11 @@
                     Shop
                 </NavLink>
             </li>
-            <!-- Additional links (e.g., Logout) can be added later -->
         </ul>
+
+        <NavLink href="@AppRoutes.Account.Profile" class="profile-link" title="My Profile">
+            <img src="Images/profile.webp" alt="My Profile" class="profile-icon" />
+            <span class="profile-text">Profile</span>
+        </NavLink>
     </div>
 </nav>

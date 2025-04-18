@@ -1,23 +1,30 @@
-/* Minimal Layout Styles */
+﻿/* ─── GLOBAL PAGE RESET ───────────────────────────────────────────── */
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    background: #1b1b1b;
+    color: #e0e0e0;
+}
+
+/* ─── MINIMAL LAYOUT (login/register/index) ───────────────────────── */
 .minimal-layout {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #1b1b1b;
-    color: #e0e0e0;
 }
 
     .minimal-layout .header {
-        background-color: #2c2c2c;
+        background: #2c2c2c;
         padding: 1rem 0;
-        border-bottom: 1px solid #444;
+        border-bottom: 2px solid #555;
     }
 
     .minimal-layout .site-title {
         margin: 0;
         text-align: center;
         font-family: Georgia, serif;
-        color: #f2d048;
+        color: #d4af37; /* metallic gold accent */
     }
 
     .minimal-layout .content {
@@ -26,32 +33,31 @@
     }
 
     .minimal-layout .footer {
-        background-color: #2c2c2c;
+        background: #2c2c2c;
         padding: 1rem 0;
-        border-top: 1px solid #444;
+        border-top: 2px solid #555;
+        text-align: center;
         font-size: 0.9rem;
     }
 
-/* Main Layout Styles */
+/* ─── MAIN LAYOUT (after login) ──────────────────────────────────── */
 .main-layout {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    background-color: #1b1b1b;
-    color: #e0e0e0;
 }
 
     .main-layout .header {
-        background-color: #2c2c2c;
+        background: linear-gradient(135deg, #3e3e3e, #1b1b1b);
         padding: 1rem 0;
-        border-bottom: 1px solid #444;
+        border-bottom: 2px solid #555;
     }
 
     .main-layout .site-title {
         margin: 0;
         text-align: center;
         font-family: Georgia, serif;
-        color: #f2d048;
+        color: #d4af37;
     }
 
     .main-layout .content {
@@ -60,69 +66,85 @@
     }
 
     .main-layout .footer {
-        background-color: #2c2c2c;
+        background: #2c2c2c;
         padding: 1rem 0;
-        border-top: 1px solid #444;
+        border-top: 2px solid #555;
+        text-align: center;
         font-size: 0.9rem;
     }
 
-/* NavMenu Styles */
+/* ─── NAV MENU ───────────────────────────────────────────────────── */
 .navmenu {
-    background-color: #333;
+    background: #262626;
     padding: 0.5rem 0;
 }
 
-    .navmenu .nav-list {
-        list-style: none;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-    }
-
-    .navmenu .nav-item {
-        margin: 0 1rem;
-    }
-
-    .navmenu .nav-link {
-        color: #e0e0e0;
-        text-decoration: none;
-        font-weight: bold;
-        font-size: 1.1rem;
-    }
-
-        .navmenu .nav-link.active,
-        .navmenu .nav-link:hover {
-            color: #f2d048;
-            text-decoration: underline;
-        }
-
-/* Landing Page Styles */
-.landing-page {
-    padding: 3rem 0;
-    text-align: center;
+.nav-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
-    .landing-page .buttons a.btn {
-        min-width: 140px;
-        font-size: 1.1rem;
+.nav-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    gap: 1.5rem;
+}
+
+.nav-link {
+    color: #e0e0e0;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+    .nav-link.active,
+    .nav-link:hover {
+        color: #d4af37;
+        text-decoration: underline;
     }
 
-/* Login and Register Page Styles */
+/* profile icon on right */
+.profile-link {
+    display: inline-block;
+}
+
+.profile-icon {
+    width: 1.8rem;
+    height: 1.8rem;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid transparent;
+    transition: border-color 0.2s ease;
+}
+
+.profile-link:hover .profile-icon {
+    border-color: #d4af37;
+}
+
+.profile-text {
+    margin-left: 0.5rem;
+    font-size: 0.9rem;
+    color: #e0e0e0;
+    transition: color 0.2s ease;
+}
+
+.profile-link:hover .profile-text {
+    color: #d4af37;
+}
+
+/* ─── FORM PAGES ────────────────────────────────────────────────── */
 .login-page,
 .register-page {
     max-width: 400px;
     margin: 3rem auto;
 }
-
     .login-page h2,
     .register-page h2 {
         text-align: center;
         margin-bottom: 1.5rem;
     }
 
-/* Player Selection Page Styles */
-.player-selection {
-    padding: 3rem 0;
-    text-align: center;
-}
+/* keep your existing app.css overrides for forms, validation, etc. */
