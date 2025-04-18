@@ -5,11 +5,11 @@ using ActionCommandGame.Services.Model.Requests;
 
 namespace ActionCommandGame.Sdk
 {
-    public class IdentityApi: IIdentityService<AuthenticationResult>
+    public class IdentitySdk: IIdentityService<AuthenticationResult>
     {
         private readonly IHttpClientFactory _httpClientFactory;
 
-        public IdentityApi(IHttpClientFactory httpClientFactory)
+        public IdentitySdk(IHttpClientFactory httpClientFactory)
         {
             _httpClientFactory = httpClientFactory;
         }

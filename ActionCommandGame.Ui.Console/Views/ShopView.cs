@@ -7,16 +7,16 @@ namespace ActionCommandGame.Ui.ConsoleApp.Views
 {
     internal class ShopView: IView
     {
-        private readonly IItemService _itemApi;
+        private readonly IItemService _itemSdk;
 
-        public ShopView(IItemService itemApi)
+        public ShopView(IItemService itemSdk)
         {
-            _itemApi = itemApi;
+            _itemSdk = itemSdk;
         }
         public async Task Show()
         {
             await ConsoleBlockWriter.Write("Shop");
-            var shopItems = await _itemApi.Find();
+            var shopItems = await _itemSdk.Find();
 
             if (shopItems.Data is null)
             {

@@ -10,21 +10,21 @@ namespace ActionCommandGame.Ui.ConsoleApp.Views
     internal class InventoryView: IView
     {
         private readonly MemoryStore _memoryStore;
-        private readonly IPlayerItemService _playerItemApi;
+        private readonly IPlayerItemService _playerItemSdk;
 
         public InventoryView(
             MemoryStore memoryStore,
-            IPlayerItemService playerItemApi)
+            IPlayerItemService playerItemSdk)
         {
             _memoryStore = memoryStore;
-            _playerItemApi = playerItemApi;
+            _playerItemSdk = playerItemSdk;
         }
         public async Task Show()
         {
             await ConsoleBlockWriter.Write("Inventory");
 
             var filter = new PlayerItemFilter { PlayerId = _memoryStore.CurrentPlayerId };
-            var inventoryResult = await _playerItemApi.Find(filter);
+            var inventoryResult = await _playerItemSdk.Find(filter);
 
             if (inventoryResult.Data is null || !inventoryResult.Data.Any())
             {

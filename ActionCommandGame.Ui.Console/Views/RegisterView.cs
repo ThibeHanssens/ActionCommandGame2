@@ -11,16 +11,16 @@ namespace ActionCommandGame.Ui.ConsoleApp.Views
     internal class RegisterView: IView
     {
         private readonly ITokenStore _tokenStore;
-        private readonly IIdentityService<AuthenticationResult> _identityApi;
+        private readonly IIdentityService<AuthenticationResult> _identitySdk;
         private readonly NavigationManager _navigationManager;
 
         public RegisterView(
             ITokenStore tokenStore,
-            IIdentityService<AuthenticationResult> identityApi,
+            IIdentityService<AuthenticationResult> identitySdk,
             NavigationManager navigationManager)
         {
             _tokenStore = tokenStore;
-            _identityApi = identityApi;
+            _identitySdk = identitySdk;
             _navigationManager = navigationManager;
         }
         public async Task Show()
@@ -38,7 +38,7 @@ namespace ActionCommandGame.Ui.ConsoleApp.Views
         {
             var request = await GetRegisterRequest();
 
-            var result = await _identityApi.Register(request);
+            var result = await _identitySdk.Register(request);
 
             if (!result.Success)
             {

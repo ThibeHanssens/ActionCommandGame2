@@ -38,6 +38,13 @@ if (string.IsNullOrWhiteSpace(apiSettings.BaseUrl))
 // (e.g. IGameService, IPlayerService, IItemService, IIdentityService, etc.) to their implementations.
 builder.Services.AddApi(apiSettings.BaseUrl);
 
+// Register all SDK implementations
+builder.Services.AddScoped<IdentitySdk>();
+builder.Services.AddScoped<GameSdk>();
+builder.Services.AddScoped<ItemSdk>();
+builder.Services.AddScoped<PlayerSdk>();
+builder.Services.AddScoped<PlayerItemSdk>();
+
 // Add Blazored LocalStorage for secure token storage.
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<ITokenStore, TokenStore>();

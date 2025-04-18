@@ -6,9 +6,9 @@ namespace ActionCommandGame.BlazorApp.Services
 {
     public class IdentityService
     {
-        private readonly IdentityApi _sdk;
+        private readonly IdentitySdk _sdk;
 
-        public IdentityService(IdentityApi sdk)
+        public IdentityService(IdentitySdk sdk)
         {
             _sdk = sdk;
         }

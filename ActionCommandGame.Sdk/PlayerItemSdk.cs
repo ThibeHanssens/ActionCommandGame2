@@ -8,12 +8,12 @@ using ActionCommandGame.Services.Model.Results;
 
 namespace ActionCommandGame.Sdk
 {
-    public class PlayerItemApi: IPlayerItemService
+    public class PlayerItemSdk: IPlayerItemService
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ITokenStore _tokenStore;
 
-        public PlayerItemApi(IHttpClientFactory httpClientFactory, ITokenStore tokenStore)
+        public PlayerItemSdk(IHttpClientFactory httpClientFactory, ITokenStore tokenStore)
         {
             _httpClientFactory = httpClientFactory;
             _tokenStore = tokenStore;

@@ -14,18 +14,18 @@ namespace ActionCommandGame.Ui.MvcApplication.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly IIdentityService<AuthenticationResult> _identityApi;
+        private readonly IIdentityService<AuthenticationResult> _identitySdk;
         private readonly ITokenStore _tokenStore;
-        private readonly IItemService _itemApi;
+        private readonly IItemService _itemSdk;
 
         public HomeController(
-            IIdentityService<AuthenticationResult> identityApi, 
+            IIdentityService<AuthenticationResult> identitySdk, 
             ITokenStore tokenStore, 
-            IItemService itemApi)
+            IItemService itemSdk)
         {
-            _identityApi = identityApi;
+            _identitySdk = identitySdk;
             _tokenStore = tokenStore;
-            _itemApi = itemApi;
+            _itemSdk = itemSdk;
         }
 
         public IActionResult Index()
@@ -43,7 +43,7 @@ namespace ActionCommandGame.Ui.MvcApplication.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignIn(UserSignInRequest request)
         {
-            var signInResult = await _identityApi.SignIn(request);
+            var signInResult = await _identitySdk.SignIn(request);
             if (!signInResult.Success)
             {
                 if (signInResult.Errors is not null)
@@ -92,7 +92,7 @@ namespace ActionCommandGame.Ui.MvcApplication.Controllers
         [Authorize]
         public async Task<IActionResult> Shop()
         {
-            var result = await _itemApi.Find();
+            var result = await _itemSdk.Find();
             if (!result.IsSuccess)
             {
                 return RedirectToAction("Index");
