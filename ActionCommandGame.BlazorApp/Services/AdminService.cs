@@ -1,5 +1,6 @@
 ﻿using ActionCommandGame.Sdk;
 using ActionCommandGame.Services.Model.Core;
+using ActionCommandGame.Services.Model.Requests;
 using ActionCommandGame.Services.Model.Results;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,9 +22,27 @@ namespace ActionCommandGame.BlazorApp.Services
         public Task<ServiceResult<IList<ItemResult>>> GetAllItemsAsync()
             => _itemSdk.Find();
         public Task<ServiceResult<ItemResult>> CreateItemAsync(ItemResult dto)
-            => _itemSdk.Create(dto);
+        => _itemSdk.Create(new ItemCreateRequest {
+            Name                   = dto.Name,
+            Description            = dto.Description,
+            Price                  = dto.Price,
+            Fuel                   = dto.Fuel,
+            Attack                 = dto.Attack,
+            Defense                = dto.Defense,
+            ActionCooldownSeconds  = dto.ActionCooldownSeconds
+        });
         public Task<ServiceResult<ItemResult>> UpdateItemAsync(ItemResult dto)
-            => _itemSdk.Update(dto);
+        => _itemSdk.Update(new ItemUpdateRequest
+        {
+            Id = dto.Id,
+            Name = dto.Name,
+            Description = dto.Description,
+            Price = dto.Price,
+            Fuel = dto.Fuel,
+            Attack = dto.Attack,
+            Defense = dto.Defense,
+            ActionCooldownSeconds = dto.ActionCooldownSeconds
+        });
         public Task<ServiceResult> DeleteItemAsync(int id)
             => _itemSdk.Delete(id);
 

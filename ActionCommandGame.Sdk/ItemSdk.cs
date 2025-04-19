@@ -3,6 +3,7 @@ using ActionCommandGame.Sdk.Abstractions;
 using ActionCommandGame.Sdk.Extensions;
 using ActionCommandGame.Services.Abstractions;
 using ActionCommandGame.Services.Model.Core;
+using ActionCommandGame.Services.Model.Requests;
 using ActionCommandGame.Services.Model.Results;
 
 namespace ActionCommandGame.Sdk
@@ -61,11 +62,11 @@ namespace ActionCommandGame.Sdk
         }
 
         // Create a new item
-        public async Task<ServiceResult<ItemResult>> Create(ItemResult dto)
+        public async Task<ServiceResult<ItemResult>> Create(ItemCreateRequest request)
         {
             var client = _httpClientFactory.CreateClient("ActionCommandGame");
             client.AddAuthorization(await _tokenStore.GetTokenAsync());
-            var resp = await client.PostAsJsonAsync("admin/items", dto);
+            var resp = await client.PostAsJsonAsync("admin/items", request);
             resp.EnsureSuccessStatusCode();
             return await resp.Content
                              .ReadFromJsonAsync<ServiceResult<ItemResult>>()
@@ -73,11 +74,11 @@ namespace ActionCommandGame.Sdk
         }
 
         // Update an existing item
-        public async Task<ServiceResult<ItemResult>> Update(ItemResult dto)
+        public async Task<ServiceResult<ItemResult>> Update(ItemUpdateRequest request)
         {
             var client = _httpClientFactory.CreateClient("ActionCommandGame");
             client.AddAuthorization(await _tokenStore.GetTokenAsync());
-            var resp = await client.PutAsJsonAsync($"admin/items/{dto.Id}", dto);
+            var resp = await client.PutAsJsonAsync($"admin/items/{request.Id}", request);
             resp.EnsureSuccessStatusCode();
             return await resp.Content
                              .ReadFromJsonAsync<ServiceResult<ItemResult>>()
@@ -95,6 +96,5 @@ namespace ActionCommandGame.Sdk
                              .ReadFromJsonAsync<ServiceResult>()
                    ?? new ServiceResult();
         }
-
     }
 }
