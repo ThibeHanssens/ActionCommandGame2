@@ -5,7 +5,11 @@
 @using ActionCommandGame.Services.Model.Results
 @inject AdminService AdminService
 
-<h3>Negative Game Events</h3>
+<div class="d-flex align-items-center mb-3">
+    <NavLink class="btn btn-secondary" href="/admin">← Back</NavLink>
+    <h3 class="flex-grow-1 text-center mb-0">Negative Game Events</h3>
+    <div style="width:5rem"><!-- spacer --></div>
+</div>
 <button class="btn btn-success mb-3" @onclick="New">+ New</button>
 
 <EditForm Model="current" OnValidSubmit="Save">
@@ -15,21 +19,27 @@
         <div class="card p-3 mb-3">
             <div class="row g-2">
                 <div class="col">
+                    <label class="form-label">Name</label>
                     <InputText class="form-control" @bind-Value="current.Name" placeholder="Name" />
                 </div>
                 <div class="col">
+                    <label class="form-label">Description</label>
                     <InputText class="form-control" @bind-Value="current.Description" placeholder="Description" />
                 </div>
                 <div class="col">
+                    <label class="form-label">Defense Loss</label>
                     <InputNumber class="form-control" @bind-Value="current.DefenseLoss" placeholder="Defense Loss" />
                 </div>
                 <div class="col">
+                    <label class="form-label">With Gear Desc.</label>
                     <InputText class="form-control" @bind-Value="current.DefenseWithGearDescription" placeholder="With Gear Desc." />
                 </div>
                 <div class="col">
+                    <label class="form-label">Without Gear Desc.</label>
                     <InputText class="form-control" @bind-Value="current.DefenseWithoutGearDescription" placeholder="Without Gear Desc." />
                 </div>
                 <div class="col">
+                    <label class="form-label">Probability</label>
                     <InputNumber class="form-control" @bind-Value="current.Probability" placeholder="Probability" />
                 </div>
                 <div class="col-auto">
@@ -50,7 +60,7 @@ else
     <ul class="list-group mb-3">
         @foreach (var ev in events)
         {
-            <li class="list-group-item d-flex justify-content-between align-items-center">
+            <li class="list-group-item">
                 <div>
                     <strong>@ev.Name</strong>
                     @if (!string.IsNullOrWhiteSpace(ev.Description))
@@ -58,6 +68,9 @@ else
                         <span>: @ev.Description</span>
                     }
                     <span class="text-muted ms-2">Loss: @ev.DefenseLoss</span>
+                    <small class="d-block">With gear: @ev.DefenseWithGearDescription</small>
+                    <small class="d-block">Without gear: @ev.DefenseWithoutGearDescription</small>
+                    <small class="d-block text-muted">Probability: @ev.Probability</small>
                 </div>
                 <button class="btn btn-sm btn-danger" @onclick="() => Delete(ev.Id)">X</button>
             </li>

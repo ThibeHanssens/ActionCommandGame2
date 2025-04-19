@@ -7,7 +7,11 @@
 @using ActionCommandGame.Services.Model.Results
 @inject AdminService AdminService
 
-<h3>Items</h3>
+<div class="d-flex align-items-center mb-3">
+    <NavLink class="btn btn-secondary" href="/admin">← Back</NavLink>
+    <h3 class="flex-grow-1 text-center mb-0">Items</h3>
+    <div style="width:5rem"></div>
+</div>
 <button class="btn btn-success mb-3" @onclick="NewItem">+ New Item</button>
 
 @* NEW‐ITEM FORM ABOVE THE TABLE *@
@@ -18,22 +22,28 @@
         <div class="card p-3 mb-3">
             <div class="row g-2">
                 <div class="col">
+                    <label class="form-label">Name</label>
                     <InputText class="form-control" @bind-Value="current.Name" placeholder="Name" />
                 </div>
                 <div class="col">
+                    <label class="form-label">Price</label>
                     <InputNumber class="form-control" @bind-Value="current.Price" placeholder="Price" />
                 </div>
                 <div class="col">
+                    <label class="form-label">Fuel</label>
                     <InputNumber class="form-control" @bind-Value="current.Fuel" placeholder="Fuel" />
                 </div>
                 <div class="col">
+                    <label class="form-label">Attack</label>
                     <InputNumber class="form-control" @bind-Value="current.Attack" placeholder="Attack" />
                 </div>
                 <div class="col">
+                    <label class="form-label">Defense</label>
                     <InputNumber class="form-control" @bind-Value="current.Defense" placeholder="Defense" />
                 </div>
                 <div class="col">
-                    <InputNumber class="form-control" @bind-Value="current.ActionCooldownSeconds" placeholder="Cooldown s" />
+                    <label class="form-label">Cooldown (s)</label>
+                    <InputNumber class="form-control" @bind-Value="current.ActionCooldownSeconds" placeholder="Cooldown (s)" />
                 </div>
                 <div class="col-auto">
                     <button class="btn btn-primary">Save</button>
