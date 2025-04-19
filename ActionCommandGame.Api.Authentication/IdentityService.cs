@@ -3,8 +3,11 @@ using System.Security.Claims;
 using System.Text;
 using ActionCommandGame.Api.Authentication.Model;
 using ActionCommandGame.Api.Authentication.Settings;
+using ActionCommandGame.Model;
+using ActionCommandGame.Repository;
 using ActionCommandGame.Services.Abstractions;
 using ActionCommandGame.Services.Model.Core;
+using System.Threading.Tasks;
 using ActionCommandGame.Services.Model.Requests;
 using ActionCommandGame.Services.Model.Results;
 using Microsoft.AspNetCore.Identity;
@@ -14,15 +17,18 @@ namespace ActionCommandGame.Api.Authentication
 {
 	public class IdentityService: IIdentityService<AuthenticationResult>
     {
-		private readonly UserManager<IdentityUser> _userManager;
+        private readonly ActionCommandGameDbContext _db;
+        private readonly UserManager<IdentityUser> _userManager;
 		private readonly JwtSettings _jwtSettings;
 
 		public IdentityService(
 			UserManager<IdentityUser> userManager, 
-			JwtSettings jwtSettings)
-		{
+			JwtSettings jwtSettings,
+            ActionCommandGameDbContext db)
+        {
 			_userManager = userManager;
 			_jwtSettings = jwtSettings;
+			_db = db;
 		}
 
         public async Task<AuthenticationResult> Register(UserRegistrationRequest request)
@@ -50,7 +56,17 @@ namespace ActionCommandGame.Api.Authentication
 				};
 			}
 
-			return GenerateAuthenticationResult(user);
+            // Create the default player for this new user**
+            _db.Players.Add(new Player
+            {
+                UserId = user.Id,
+                Name = "Default player",
+                Money = 100,
+                Experience = 0
+            });
+            await _db.SaveChangesAsync();
+
+            return await GenerateAuthenticationResultAsync(user);
 		}
 
 		public async Task<AuthenticationResult> SignIn(UserSignInRequest request)
@@ -74,19 +90,17 @@ namespace ActionCommandGame.Api.Authentication
 				};
 			}
 
-			return GenerateAuthenticationResult(user);
+			return await GenerateAuthenticationResultAsync(user);
 		}
 
-		private AuthenticationResult GenerateAuthenticationResult(IdentityUser user)
+		private async Task<AuthenticationResult> GenerateAuthenticationResultAsync(IdentityUser user)
 		{
             if (string.IsNullOrWhiteSpace(_jwtSettings.Secret))
             {
                 return new AuthenticationResult { Errors = new List<string> { "Internal configuration error" } };
             }
 
-			var tokenHandler = new JwtSecurityTokenHandler();
-			var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
-
+            // 1) base claims
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
@@ -96,22 +110,30 @@ namespace ActionCommandGame.Api.Authentication
             if (!string.IsNullOrWhiteSpace(user.Email))
             {
                 claims.Add(new Claim(JwtRegisteredClaimNames.Sub, user.Email));
-				claims.Add(new Claim(JwtRegisteredClaimNames.Email, user.Email));
+                claims.Add(new Claim(JwtRegisteredClaimNames.Email, user.Email));
             }
 
+            // 2) add all the user's roles as ClaimTypes.Role
+            var roles = await _userManager.GetRolesAsync(user);
+            claims.AddRange(roles.Select(r => new Claim(ClaimTypes.Role, r)));
+
+            // 3) create the token
+            var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
+            var creds = new SigningCredentials(new SymmetricSecurityKey(key),
+                                               SecurityAlgorithms.HmacSha256Signature);
+
             var tokenDescriptor = new SecurityTokenDescriptor
-			{
-				Subject = new ClaimsIdentity(claims),
-				Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
-				SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-			};
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.Add(_jwtSettings.TokenLifetime),
+                SigningCredentials = creds
+            };
 
-			var token = tokenHandler.CreateToken(tokenDescriptor);
+            var handler = new JwtSecurityTokenHandler();
+            var securityToken = handler.CreateToken(tokenDescriptor);
+            var token = handler.WriteToken(securityToken);
 
-			return new AuthenticationResult
-			{
-				Token = tokenHandler.WriteToken(token)
-			};
-		}
+            return new AuthenticationResult { Token = token };
+        }
 	}
 }

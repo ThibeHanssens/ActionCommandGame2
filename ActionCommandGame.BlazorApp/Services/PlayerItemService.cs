@@ -1,4 +1,5 @@
-﻿using ActionCommandGame.Sdk;
+﻿using System.Threading.Tasks;
+using ActionCommandGame.Sdk;
 using ActionCommandGame.Services.Model.Core;
 using ActionCommandGame.Services.Model.Filters;
 using ActionCommandGame.Services.Model.Results;
@@ -16,26 +17,18 @@ namespace ActionCommandGame.BlazorApp.Services
 
         // Retrieves a list of player items using the provided filter.
         public async Task<ServiceResult<IList<PlayerItemResult>>> GetAllAsync(PlayerItemFilter filter)
-        {
-            return await _sdk.FindAsync(filter);
-        }
+            => await _sdk.FindAsync(filter);
 
         // Retrieves a single player item by ID.
-        public Task<ServiceResult<PlayerItemResult>> GetByIdAsync(int id)
-        {
-            throw new NotImplementedException("GetById is not implemented in the SDK yet.");
-        }
+        public async Task<ServiceResult<PlayerItemResult>> GetByIdAsync(int id)
+            => await _sdk.Get(id);
 
         // Creates a new player item for the specified player and item.
-        public Task<ServiceResult<PlayerItemResult>> CreateAsync(int playerId, int itemId)
-        {
-            throw new NotImplementedException("Create is not implemented in the SDK yet.");
-        }
+        public async Task<ServiceResult<PlayerItemResult>> CreateAsync(int playerId, int itemId)
+            => await _sdk.Create(playerId, itemId);
 
         // Deletes a player item by ID.
-        public Task<ServiceResult> DeleteAsync(int id)
-        {
-            throw new NotImplementedException("Delete is not implemented in the SDK yet.");
-        }
+        public async Task<ServiceResult> DeleteAsync(int id)
+            => await _sdk.Delete(id);
     }
 }

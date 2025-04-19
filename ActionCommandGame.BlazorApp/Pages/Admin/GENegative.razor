@@ -1,0 +1,52 @@
+﻿@page "/admin/ge-negative"
+@layout MainLayout
+@attribute [Authorize(Roles = "SuperAdmin")]
+
+@using ActionCommandGame.Services.Model.Results
+@inject AdminService AdminService
+
+<h3>Negative Game Events</h3>
+<button class="btn btn-success mb-3" @onclick="New">+ New</button>
+
+@if (loading)
+{
+    <p>Loading…</p>
+}
+else
+{
+    <ul class="list-group">
+        @foreach (var ev in events)
+        {
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>@ev.Name</strong>
+                    @if (!string.IsNullOrWhiteSpace(ev.Description))
+                    {
+                        <span>: @ev.Description</span>
+                    }
+                    <span class="text-muted ms-2">Loss: @ev.DefenseLoss</span>
+                </div>
+                <button class="btn btn-sm btn-danger" @onclick="() => Delete(ev.Id)">X</button>
+            </li>
+        }
+    </ul>
+}
+@code {
+    private bool loading;
+    private List<NegativeGameEventResult> events = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        loading = true;
+        var res = await AdminService.GetAllNegativeAsync();
+        events = res.Data?.ToList() ?? new();
+        loading = false;
+    }
+
+    void New() {}
+    async Task Delete(int id)
+    {
+        await AdminService.DeleteNegativeAsync(id);
+        await OnInitializedAsync();
+    }
+}

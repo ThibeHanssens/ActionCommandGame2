@@ -1,4 +1,7 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.Extensions.Options
+@using ActionCommandGame.BlazorApp.Settings
+@inject IOptions<AppSettings> AppSettings
 @inject AuthenticationStateProvider AuthProvider
 @inject ITokenStore TokenStore
 @inject NavigationManager Nav
@@ -13,11 +16,29 @@
                 </NavLink>
             </li>
             <li class="nav-item">
+                <NavLink href="@AppRoutes.Game.Action" class="nav-link" Match="NavLinkMatch.All">
+                    @AppSettings.Value.Action
+                </NavLink>
+            </li>
+            <li class="nav-item">
                 <NavLink href="@AppRoutes.Game.Shop" class="nav-link" Match="NavLinkMatch.All">
                     Shop
                 </NavLink>
             </li>
+            <li class="nav-item">
+                <NavLink href="@AppRoutes.Game.Inventory" class="nav-link" Match="NavLinkMatch.All">
+                    Inventory
+                </NavLink>
+            </li>
         </ul>
+        <AuthorizeView Roles="SuperAdmin">
+            <li class="nav-item px-3">
+                <NavLink class="nav-link" href="/admin">
+                    <span class="oi oi-cog" aria-hidden="true"></span> Admin
+                </NavLink>
+            </li>
+        </AuthorizeView>
+
 
         <ul class="nav-list">
             <li class="nav-item">

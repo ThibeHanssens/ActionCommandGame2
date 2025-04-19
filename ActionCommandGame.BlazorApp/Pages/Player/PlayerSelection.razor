@@ -1,9 +1,104 @@
 ﻿@page "/play/player-selection"
 @layout MainLayout
 @attribute [Authorize]
-@using Microsoft.AspNetCore.Authorization
 
-<div class="player-selection-page container text-center">
-    <h2>Player Selection</h2>
-    <p>This screen is under construction. Choose a player to continue your adventure!</p>
+@using ActionCommandGame.BlazorApp.Stores
+@using ActionCommandGame.Services.Model.Core
+@using ActionCommandGame.Services.Model.Filters
+@inject PlayerService PlayerService
+@inject MemoryStore Store
+@inject NavigationManager Nav
+
+<h2>Player Selection</h2>
+
+<div class="form-group mb-3 w-75 mx-auto">
+    <InputText @bind-Value="newName"
+               placeholder="New player name"
+               class="form-control mb-2" />
+    <button class="btn btn-primary w-100" @onclick="CreateNew">Create</button>
+    @if (!string.IsNullOrEmpty(createError))
+    {
+        <div class="text-danger mt-1">@createError</div>
+    }
 </div>
+
+@if (players is null)
+{
+    <p>Loading…</p>
+}
+else if (!players.Any())
+{
+    <p>You have no players.</p>
+}
+else
+{
+    <div class="list-group w-75 mx-auto">
+        @foreach (var p in players)
+        {
+            <a class="list-group-item list-group-item-action @(p.Id == currentId ? "active" : "")"
+               @onclick="() => Select(p.Id)">
+                @p.Name (@p.Experience XP)
+            </a>
+        }
+    </div>
+
+    <button class="btn btn-secondary w-75 mx-auto d-block mt-3" @onclick="Continue">
+        Continue
+    </button>
+}
+
+@code {
+    List<PlayerResult>? players;
+    int? currentId;
+    string newName = "";
+    string createError = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var res = await PlayerService.GetAllAsync(new PlayerFilter { FilterUserPlayers = true });
+        players = res.Data?.ToList() ?? new();
+
+        // pull out whatever’s in memory
+        currentId = Store.CurrentPlayerId > 0
+          ? Store.CurrentPlayerId
+          : (int?)null;
+
+        // if nothing yet, pick the first
+        if (currentId == null && players.Any())
+        {
+            currentId = players[0].Id;
+            Store.CurrentPlayerId = currentId.Value;
+        }
+    }
+
+    void Select(int id)
+    {
+        currentId = id;
+        Store.CurrentPlayerId = id;
+    }
+
+    async Task CreateNew()
+    {
+        createError = "";
+        if (string.IsNullOrWhiteSpace(newName))
+        {
+            createError = "Name required";
+            return;
+        }
+
+        var cr = await PlayerService.CreateAsync(new PlayerCreateRequest { Name = newName });
+        var created = cr.Data;
+        if (created == null)
+        {
+            createError = "Could not create player.";
+        }
+        else
+        {
+            players!.Add(created);
+            Select(created.Id);
+            newName = "";
+        }
+    }
+
+    void Continue() => Nav.NavigateTo("/play/action");
+}

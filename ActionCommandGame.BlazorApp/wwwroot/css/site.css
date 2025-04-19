@@ -244,7 +244,8 @@ html, body {
 .register-page,
 .profile-page,
 .player-selection-page,
-.shop-page {
+.shop-page,
+.action-page{
     max-width: 600px;
     margin: 3rem auto;
     text-align: center;
@@ -255,6 +256,7 @@ html, body {
     .register-page h2,
     .profile-page h2,
     .player-selection-page h2,
-    .shop-page h2 {
+    .shop-page h2,
+    .action-page h2{
         margin-bottom: 1.5rem;
     }

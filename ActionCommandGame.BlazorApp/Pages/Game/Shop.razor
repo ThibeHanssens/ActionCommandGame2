@@ -1,9 +1,132 @@
 ﻿@page "/play/shop"
 @layout MainLayout
 @attribute [Authorize]
-@using Microsoft.AspNetCore.Authorization
 
-<div class="shop-page container text-center">
-    <h2>Shop</h2>
-    <p>This screen is under construction. Choose a player to continue your adventure!</p>
-</div>
+@using ActionCommandGame.Services.Model.Core
+@using ActionCommandGame.Services.Model.Results
+@using ActionCommandGame.Services.Model.Filters
+@using ActionCommandGame.BlazorApp.Stores
+@inject ItemService ItemService
+@inject GameService GameService
+@inject PlayerService PlayerService
+@inject MemoryStore Store
+
+<h2 class="text-center mb-4">Shop</h2>
+
+@if (player is null)
+{
+    <p class="text-center">Loading…</p>
+}
+else
+{
+    <div class="w-75 mx-auto mb-4 text-end">
+        <strong>Balance:</strong> €@player.Money
+    </div>
+
+    @foreach (var group in Groups)
+    {
+        <h4>@group.Key</h4>
+        <div class="row mb-4">
+            @foreach (var item in group.Value)
+            {
+                <div class="col-sm-6 col-lg-4 mb-3">
+                    <div class="card h-100">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="card-title">@item.Name (€@item.Price)</h5>
+                            @if (!string.IsNullOrEmpty(item.Description))
+                            {
+                                <p class="card-text">@item.Description</p>
+                            }
+                            <p class="card-text mb-1">
+                                @if (item.Fuel > 0)
+                                {
+                                    <span>Fuel: @item.Fuel</span>
+
+                                    <br />
+                                }
+                                @if (item.Attack > 0)
+                                {
+                                    <span>Attack: @item.Attack</span>
+
+                                    <br />
+                                }
+                                @if (item.Defense > 0)
+                                {
+                                    <span>Defense: @item.Defense</span>
+                                }
+                            </p>
+                            <button class="btn btn-primary mt-auto"
+                                    @onclick="() => Buy(item.Id)"
+                                    disabled="@(player.Money < item.Price)">
+                                Buy
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @* Feedback *@
+    @if (FeedbackMessages.Any())
+    {
+        <div class="w-75 mx-auto">
+            @foreach (var msg in FeedbackMessages)
+            {
+                var css = msg.MessagePriority == MessagePriority.Error
+                ? "alert-danger"
+                : msg.MessagePriority == MessagePriority.Warning
+                ? "alert-warning"
+                : "alert-info";
+                <div class="alert @css">@msg.Message</div>
+            }
+        </div>
+    }
+}
+
+@code {
+    private PlayerResult? player;
+    private List<ItemResult> items = new();
+    private Dictionary<string, List<ItemResult>> Groups = new();
+    private List<ServiceMessage> FeedbackMessages = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // load player
+        var p = await PlayerService.GetByIdAsync(Store.CurrentPlayerId);
+        player = p.Data;
+
+        // load items
+        var it = await ItemService.GetAllAsync();
+        items = it.Data?.ToList() ?? new();
+
+        // group by category
+        Groups = new Dictionary<string, List<ItemResult>>
+            {
+                ["Food"] = items.Where(x => x.Fuel > 0).ToList(),
+                ["Weapons"] = items.Where(x => x.Attack > 0).ToList(),
+                ["Armor"] = items.Where(x => x.Defense > 0).ToList(),
+                ["Other"] = items.Where(x => x.Fuel == 0 && x.Attack == 0 && x.Defense == 0).ToList()
+            };
+    }
+
+    private async Task Buy(int itemId)
+    {
+        FeedbackMessages.Clear();
+        var result = await GameService.BuyAsync(Store.CurrentPlayerId, itemId);
+
+        if (result.Data is null || result.Messages.Any(m => m.MessagePriority == MessagePriority.Error))
+        {
+            // show errors
+            FeedbackMessages.AddRange(result.Messages.Where(m => m.MessagePriority == MessagePriority.Error));
+        }
+        else
+        {
+            // success
+            player = result.Data.Player;
+            FeedbackMessages.Add(new ServiceMessage { Code = "BuySuccess", Message = $"You bought {result.Data.Item.Name} for €{result.Data.Item.Price}." });
+            // show any warnings or info
+            FeedbackMessages.AddRange(result.Messages.Where(m => m.MessagePriority != MessagePriority.Error));
+        }
+    }
+}

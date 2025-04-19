@@ -1,4 +1,6 @@
-﻿using System.Net.Http.Json;
+﻿using System.Net.Http;
+using System.Net.Http.Json;
+using System.Threading.Tasks;
 using ActionCommandGame.Sdk.Abstractions;
 using ActionCommandGame.Sdk.Extensions;
 using ActionCommandGame.Services.Abstractions;
@@ -8,7 +10,7 @@ using ActionCommandGame.Services.Model.Results;
 
 namespace ActionCommandGame.Sdk
 {
-    public class PlayerItemSdk: IPlayerItemService
+    public class PlayerItemSdk : IPlayerItemService
     {
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly ITokenStore _tokenStore;
@@ -24,45 +26,70 @@ namespace ActionCommandGame.Sdk
             var httpClient = _httpClientFactory.CreateClient("ActionCommandGame");
             var token = await _tokenStore.GetTokenAsync();
             httpClient.AddAuthorization(token);
-            var route = "player-items";
 
+            var route = "player-items";
             if (filter.PlayerId.HasValue)
             {
                 route += $"?playerId={filter.PlayerId}";
             }
 
             var httpResponse = await httpClient.GetAsync(route);
-
             httpResponse.EnsureSuccessStatusCode();
 
-            var result = await httpResponse.Content.ReadFromJsonAsync<ServiceResult<IList<PlayerItemResult>>>();
+            var result = await httpResponse.Content
+                .ReadFromJsonAsync<ServiceResult<IList<PlayerItemResult>>>();
 
-            if (result is null)
-            {
-                return new ServiceResult<IList<PlayerItemResult>>();
-            }
-
-            return result;
+            return result ?? new ServiceResult<IList<PlayerItemResult>>();
         }
 
-        public Task<ServiceResult<PlayerItemResult>> Get(int id)
-        {
-            throw new NotImplementedException();
-        }
-
+        // alias for interface compatibility
         public Task<ServiceResult<IList<PlayerItemResult>>> Find(PlayerItemFilter filter)
+            => FindAsync(filter);
+
+        public async Task<ServiceResult<PlayerItemResult>> Get(int id)
         {
-            throw new NotImplementedException();
+            var httpClient = _httpClientFactory.CreateClient("ActionCommandGame");
+            var token = await _tokenStore.GetTokenAsync();
+            httpClient.AddAuthorization(token);
+
+            var httpResponse = await httpClient.GetAsync($"player-items/{id}");
+            httpResponse.EnsureSuccessStatusCode();
+
+            var result = await httpResponse.Content
+                .ReadFromJsonAsync<ServiceResult<PlayerItemResult>>();
+
+            return result ?? new ServiceResult<PlayerItemResult>();
         }
 
-        public Task<ServiceResult<PlayerItemResult>> Create(int playerId, int itemId)
+        public async Task<ServiceResult<PlayerItemResult>> Create(int playerId, int itemId)
         {
-            throw new NotImplementedException();
+            var httpClient = _httpClientFactory.CreateClient("ActionCommandGame");
+            var token = await _tokenStore.GetTokenAsync();
+            httpClient.AddAuthorization(token);
+
+            var payload = new { playerId, itemId };
+            var httpResponse = await httpClient.PostAsJsonAsync("player-items", payload);
+            httpResponse.EnsureSuccessStatusCode();
+
+            var result = await httpResponse.Content
+                .ReadFromJsonAsync<ServiceResult<PlayerItemResult>>();
+
+            return result ?? new ServiceResult<PlayerItemResult>();
         }
 
-        public Task<ServiceResult> Delete(int id)
+        public async Task<ServiceResult> Delete(int id)
         {
-            throw new NotImplementedException();
+            var httpClient = _httpClientFactory.CreateClient("ActionCommandGame");
+            var token = await _tokenStore.GetTokenAsync();
+            httpClient.AddAuthorization(token);
+
+            var httpResponse = await httpClient.DeleteAsync($"player-items/{id}");
+            httpResponse.EnsureSuccessStatusCode();
+
+            var result = await httpResponse.Content
+                .ReadFromJsonAsync<ServiceResult>();
+
+            return result ?? new ServiceResult();
         }
     }
 }

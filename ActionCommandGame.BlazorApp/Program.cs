@@ -10,6 +10,7 @@ using ActionCommandGame.Sdk;
 using ActionCommandGame.BlazorApp.Services;
 using Blazored.LocalStorage;
 using ActionCommandGame.Sdk.Abstractions;
+using static ActionCommandGame.BlazorApp.Services.PlayerService;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
@@ -41,6 +42,7 @@ builder.Services.AddApi(apiSettings.BaseUrl);
 // Register all SDK implementations
 builder.Services.AddScoped<IdentitySdk>();
 builder.Services.AddScoped<GameSdk>();
+builder.Services.AddScoped<GameEventSdk>();
 builder.Services.AddScoped<ItemSdk>();
 builder.Services.AddScoped<PlayerSdk>();
 builder.Services.AddScoped<PlayerItemSdk>();
@@ -49,6 +51,7 @@ builder.Services.AddScoped<ProfileSdk>();
 // Add Blazored LocalStorage for secure token storage.
 builder.Services.AddBlazoredLocalStorage();
 builder.Services.AddScoped<ITokenStore, TokenStore>();
+builder.Services.AddScoped<MemoryStore>();
 
 // Add authorization support and configure our custom authentication state provider.
 builder.Services.AddAuthorizationCore();
@@ -62,6 +65,7 @@ builder.Services.AddScoped<ItemService>();
 builder.Services.AddScoped<PlayerService>();
 builder.Services.AddScoped<PlayerItemService>();
 builder.Services.AddScoped<ProfileService>();
+builder.Services.AddScoped<AdminService>();
 
 // Configure an HttpClient that automatically adds the JWT token to all API requests.
 // This configuration is useful for any additional HTTP calls you might make outside the SDK.

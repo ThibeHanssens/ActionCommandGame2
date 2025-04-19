@@ -1,0 +1,149 @@
+﻿@page "/admin/items"
+@layout MainLayout
+@attribute [Authorize(Roles = "SuperAdmin")]
+
+@using ActionCommandGame.Services.Model.Core
+@using ActionCommandGame.Services.Model.Results
+@inject AdminService AdminService
+
+<h3>Items</h3>
+
+<button class="btn btn-success mb-3" @onclick="NewItem">+ New Item</button>
+
+@if (isLoading)
+{
+    <p>Loading…</p>
+}
+else
+{
+    <table class="table table-sm">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Price</th>
+                <th>Fuel</th>
+                <th>Attack</th>
+                <th>Defense</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var it in items)
+            {
+                <tr>
+                    <td>@it.Name</td>
+                    <td>@it.Price</td>
+                    <td>@it.Fuel</td>
+                    <td>@it.Attack</td>
+                    <td>@it.Defense</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary me-1" @onclick="() => Edit(it)">Edit</button>
+                        <button class="btn btn-sm btn-danger" @onclick="() => Delete(it.Id)">X</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+<EditForm Model="current" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    @if (showForm)
+    {
+        <div class="card p-3 mb-3">
+            <div class="row g-2">
+                <div class="col">
+                    <InputText class="form-control" @bind-Value="current.Name" placeholder="Name" />
+                </div>
+                <div class="col">
+                    <InputNumber class="form-control" @bind-Value="current.Price" placeholder="Price" />
+                </div>
+                <div class="col">
+                    <InputNumber class="form-control" @bind-Value="current.Fuel" placeholder="Fuel" />
+                </div>
+                <div class="col">
+                    <InputNumber class="form-control" @bind-Value="current.Attack" placeholder="Attack" />
+                </div>
+                <div class="col">
+                    <InputNumber class="form-control" @bind-Value="current.Defense" placeholder="Defense" />
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary ms-1" @onclick="Cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    }
+</EditForm>
+
+@code {
+    private bool isLoading;
+    private bool showForm;
+    private List<ItemResult> items = new();
+    private ItemResult current = new ItemResult
+        {
+            Name = string.Empty,
+            Description = null,
+            Price = 0,
+            Fuel = 0,
+            Attack = 0,
+            Defense = 0
+        };
+    protected override async Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    async Task Load()
+    {
+        isLoading = true;
+        var res = await AdminService.GetAllItemsAsync();
+        items = res.Data?.ToList() ?? new();
+        isLoading = false;
+    }
+
+    void NewItem()
+    {
+        current = new ItemResult
+            {
+                Name = string.Empty,
+                Description = null,
+                Price = 0,
+                Fuel = 0,
+                Attack = 0,
+                Defense = 0
+            };
+        showForm = true;
+    }
+    void Edit(ItemResult it)
+    {
+        current = new ItemResult
+            {
+                Id = it.Id,
+                Name = it.Name,
+                Price = it.Price,
+                Fuel = it.Fuel,
+                Attack = it.Attack,
+                Defense = it.Defense
+            };
+        showForm = true;
+    }
+    void Cancel() => showForm = false;
+
+    async Task Save()
+    {
+        if (current.Id == 0)
+            await AdminService.CreateItemAsync(current);
+        else
+            await AdminService.UpdateItemAsync(current);
+
+        showForm = false;
+        await Load();
+    }
+
+    async Task Delete(int id)
+    {
+        await AdminService.DeleteItemAsync(id);
+        await Load();
+    }
+}

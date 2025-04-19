@@ -1,10 +1,12 @@
 ﻿using ActionCommandGame.Abstractions;
+using ActionCommandGame.Model;
 using ActionCommandGame.Repository;
 using ActionCommandGame.Services.Abstractions;
 using ActionCommandGame.Services.Extensions;
 using ActionCommandGame.Services.Extensions.Filters;
 using ActionCommandGame.Services.Model.Core;
 using ActionCommandGame.Services.Model.Filters;
+using ActionCommandGame.Services.Model.Requests;
 using ActionCommandGame.Services.Model.Results;
 using Microsoft.EntityFrameworkCore;
 
@@ -42,6 +44,29 @@ namespace ActionCommandGame.Services
                 .ToListAsync();
 
             return new ServiceResult<IList<PlayerResult>>(players);
+        }
+
+        public async Task<ServiceResult<PlayerResult>> Create(PlayerCreateRequest request)
+        {
+            var userId = _userContext.UserId!;
+            var player = new Player
+            {
+                UserId = userId,
+                Name = request.Name,
+                Money = 100,
+                Experience = 0
+            };
+            _database.Players.Add(player);
+            await _database.SaveChangesAsync();
+            var dto = new PlayerResult
+            {
+                Id = player.Id,
+                Name = player.Name,
+                UserId = player.UserId,
+                Money = player.Money,
+                Experience = player.Experience
+            };
+            return new ServiceResult<PlayerResult>(dto);
         }
     }
 }

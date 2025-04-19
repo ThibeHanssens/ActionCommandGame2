@@ -4,6 +4,7 @@ using ActionCommandGame.Sdk.Extensions;
 using ActionCommandGame.Services.Abstractions;
 using ActionCommandGame.Services.Model.Core;
 using ActionCommandGame.Services.Model.Filters;
+using ActionCommandGame.Services.Model.Requests;
 using ActionCommandGame.Services.Model.Results;
 
 namespace ActionCommandGame.Sdk
@@ -64,6 +65,15 @@ namespace ActionCommandGame.Sdk
             }
 
             return result;
+        }
+
+        public async Task<ServiceResult<PlayerResult>> Create(PlayerCreateRequest req)
+        {
+            var client = _httpClientFactory.CreateClient("ActionCommandGame");
+            client.AddAuthorization(await _tokenStore.GetTokenAsync());
+            var resp = await client.PostAsJsonAsync("players", req);
+            resp.EnsureSuccessStatusCode();
+            return await resp.Content.ReadFromJsonAsync<ServiceResult<PlayerResult>>();
         }
     }
 }

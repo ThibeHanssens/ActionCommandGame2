@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\ActionCommandGame.Abstractions\ActionCommandGame.Abstractions.csproj" />
     <ProjectReference Include="..\ActionCommandGame.Api.Authentication.Model\ActionCommandGame.Api.Authentication.Model.csproj" />
+    <ProjectReference Include="..\ActionCommandGame.Repository\ActionCommandGame.Repository.csproj" />
     <ProjectReference Include="..\ActionCommandGame.Services.Abstractions\ActionCommandGame.Services.Abstractions.csproj" />
     <ProjectReference Include="..\ActionCommandGame.Services.Model\ActionCommandGame.Services.Model.csproj" />
   </ItemGroup>

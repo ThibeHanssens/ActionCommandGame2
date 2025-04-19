@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Components.Authorization;
 using ActionCommandGame.Sdk.Abstractions;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace ActionCommandGame.BlazorApp.Security
 {
@@ -37,7 +38,8 @@ namespace ActionCommandGame.BlazorApp.Security
             {
                 var jwtToken = new JsonWebToken(token);
                 var claims = jwtToken.Claims.Select(c => new Claim(c.Type, c.Value)).ToList();
-                var identity = new ClaimsIdentity(claims, "jwt");
+                //var identity = new ClaimsIdentity(claims, "jwt");
+                var identity = new ClaimsIdentity(claims, authenticationType: "jwt", nameType: System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub, roleType: "role");
                 var user = new ClaimsPrincipal(identity);
                 return new AuthenticationState(user);
             }

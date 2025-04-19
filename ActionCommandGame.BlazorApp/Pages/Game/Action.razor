@@ -1,0 +1,135 @@
+﻿@page "/play/action"
+@layout MainLayout
+@attribute [Authorize]
+
+@using ActionCommandGame.Services.Model.Results
+@using ActionCommandGame.Services.Model.Core
+@using ActionCommandGame.Extensions
+@using ActionCommandGame.BlazorApp.Stores
+@using Microsoft.Extensions.Options
+@using ActionCommandGame.BlazorApp.Settings
+@inject IOptions<AppSettings> AppSettings
+@inject GameService GameService
+@inject PlayerService PlayerService
+@inject MemoryStore Store
+
+<h2 class="text-center mb-4">@AppSettings.Value.Action</h2>
+
+@if (player is null)
+{
+    <p class="text-center">Loading…</p>
+}
+else
+{
+    <!-- Stats -->
+    <div class="row w-75 mx-auto mb-3">
+        <div class="col text-center"><strong>Fuel:</strong> @player.RemainingFuel/@player.TotalFuel</div>
+        <div class="col text-center"><strong>Attack:</strong> @player.RemainingAttack/@player.TotalAttack</div>
+        <div class="col text-center"><strong>Defense:</strong> @player.RemainingDefense/@player.TotalDefense</div>
+    </div>
+    <div class="row w-75 mx-auto mb-4">
+        <div class="col text-center"><strong>Money:</strong> €@player.Money</div>
+        <div class="col text-center"><strong>Level:</strong> @player.GetLevel() (@player.Experience XP)</div>
+    </div>
+
+    <!-- Action button -->
+    <button class="btn btn-primary btn-lg w-75 d-block mx-auto mb-4"
+            @onclick="PerformAction"
+            disabled="@(!CanAct)">
+        @ButtonText
+    </button>
+
+    <!-- Message log -->
+    <ul class="list-group w-75 mx-auto">
+        @foreach (var msg in Messages)
+        {
+            var css = msg.MessagePriority switch
+            {
+                MessagePriority.Error => "list-group-item-danger",
+                MessagePriority.Warning => "list-group-item-warning",
+                _ => "list-group-item-light"
+            };
+            <li class="list-group-item @css">@msg.Message</li>
+        }
+    </ul>
+}
+
+@code {
+    private PlayerResult? player;
+    private List<ServiceMessage> Messages = new();
+    private double cooldown;
+    private System.Timers.Timer? timer;
+
+    // Cooldown logic
+    private bool CanAct => cooldown <= 0;
+    private string ButtonText => CanAct
+        ? $"{AppSettings.Value.Action}!"
+        : $"Rest {Math.Ceiling(cooldown)}s";
+
+    protected override async Task OnInitializedAsync()
+    {
+        var res = await PlayerService.GetByIdAsync(Store.CurrentPlayerId);
+        player = res.Data;
+        UpdateCooldown();
+        StartTimer();
+    }
+
+    private void UpdateCooldown()
+    {
+        if (player?.LastActionExecutedDateTime is DateTime last)
+        {
+            var elapsed = (DateTime.UtcNow - last).TotalSeconds;
+            // use the player’s current fuel cooldown or a default
+            var cd = player.CurrentFuelActionCooldownSeconds ?? 60;
+            cooldown = cd - elapsed;
+            if (cooldown < 0) cooldown = 0;
+        }
+        else
+        {
+            cooldown = 0;
+        }
+    }
+
+    private void StartTimer()
+    {
+        timer = new System.Timers.Timer(1000);
+        timer.Elapsed += (_, __) => InvokeAsync(() => { UpdateCooldown(); StateHasChanged(); });
+        timer.Start();
+    }
+
+    private async Task PerformAction()
+    {
+        var result = await GameService.PerformActionAsync(Store.CurrentPlayerId);
+
+        if (result.Data is not null)
+        {
+            // update player stats
+            player = result.Data.Player;
+
+            // rebuild message log
+            Messages.Clear();
+
+            // Positive event
+            if (result.Data.PositiveGameEvent is { } pe)
+            {
+                Messages.Add(new ServiceMessage { Code = "PositiveEvent", Message = pe.Name + (string.IsNullOrEmpty(pe.Description) ? "" : $": {pe.Description}") });
+                if (pe.Money > 0)
+                    Messages.Add(new ServiceMessage { Code = "PositiveReward", Message = $"You gained €{pe.Money} and {pe.Experience} XP." });
+            }
+
+            // Negative event
+            if (result.Data.NegativeGameEvent is { } ne)
+            {
+                Messages.Add(new ServiceMessage { Code = "NegativeEvent", Message = ne.Name + (string.IsNullOrEmpty(ne.Description) ? "" : $": {ne.Description}") });
+                foreach (var m in result.Data.NegativeGameEventMessages)
+                    Messages.Add(m);
+            }
+
+            // All other service messages (cooldowns, warnings, level‑ups…)
+            foreach (var m in result.Messages)
+                Messages.Add(m);
+
+            UpdateCooldown();
+        }
+    }
+}

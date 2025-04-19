@@ -59,5 +59,42 @@ namespace ActionCommandGame.Sdk
 
             return result;
         }
+
+        // Create a new item
+        public async Task<ServiceResult<ItemResult>> Create(ItemResult dto)
+        {
+            var client = _httpClientFactory.CreateClient("ActionCommandGame");
+            client.AddAuthorization(await _tokenStore.GetTokenAsync());
+            var resp = await client.PostAsJsonAsync("admin/items", dto);
+            resp.EnsureSuccessStatusCode();
+            return await resp.Content
+                             .ReadFromJsonAsync<ServiceResult<ItemResult>>()
+                   ?? new ServiceResult<ItemResult>();
+        }
+
+        // Update an existing item
+        public async Task<ServiceResult<ItemResult>> Update(ItemResult dto)
+        {
+            var client = _httpClientFactory.CreateClient("ActionCommandGame");
+            client.AddAuthorization(await _tokenStore.GetTokenAsync());
+            var resp = await client.PutAsJsonAsync($"admin/items/{dto.Id}", dto);
+            resp.EnsureSuccessStatusCode();
+            return await resp.Content
+                             .ReadFromJsonAsync<ServiceResult<ItemResult>>()
+                   ?? new ServiceResult<ItemResult>();
+        }
+
+        // Delete an item
+        public async Task<ServiceResult> Delete(int id)
+        {
+            var client = _httpClientFactory.CreateClient("ActionCommandGame");
+            client.AddAuthorization(await _tokenStore.GetTokenAsync());
+            var resp = await client.DeleteAsync($"admin/items/{id}");
+            resp.EnsureSuccessStatusCode();
+            return await resp.Content
+                             .ReadFromJsonAsync<ServiceResult>()
+                   ?? new ServiceResult();
+        }
+
     }
 }

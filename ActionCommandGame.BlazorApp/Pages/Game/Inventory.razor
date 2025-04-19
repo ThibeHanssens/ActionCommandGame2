@@ -1,0 +1,102 @@
+﻿@page "/play/inventory"
+@layout MainLayout
+@attribute [Authorize]
+
+@using ActionCommandGame.Services.Model.Core
+@using ActionCommandGame.Services.Model.Filters
+@using ActionCommandGame.Services.Model.Results
+@using ActionCommandGame.BlazorApp.Stores
+@inject PlayerItemService PlayerItemService
+@inject MemoryStore Store
+
+<h2 class="text-center mb‑4">Inventory</h2>
+
+@if (isLoading)
+{
+    <p class="text-center">Loading…</p>
+}
+else if (!items.Any())
+{
+    <p class="text-center text-muted">Your inventory is empty.</p>
+}
+else
+{
+    <div class="row w‑75 mx‑auto">
+        @foreach (var pi in items)
+        {
+            <div class="col‑12 mb‑3">
+                <div class="card">
+                    <div class="card-body d‑flex justify-content-between align-items-center">
+                        <div>
+                            <h5 class="card-title mb-1">@pi.Name</h5>
+                            @if (!string.IsNullOrWhiteSpace(pi.Description))
+                            {
+                                <p class="card-text small text-muted mb‑1">@pi.Description</p>
+                            }
+                            <p class="card-text mb‑0">
+                                @if (pi.Fuel > 0)
+                                {
+                                    <span>🍖 Fuel: @pi.RemainingFuel / @pi.Fuel</span>
+
+                                    <br />
+                                }
+                                @if (pi.Attack > 0)
+                                {
+                                    <span>⚔️ Attack: @pi.RemainingAttack / @pi.Attack</span>
+
+                                    <br />
+                                }
+                                @if (pi.Defense > 0)
+                                {
+                                    <span>🛡️ Defense: @pi.RemainingDefense / @pi.Defense</span>
+
+                                    <br />
+                                }
+                                @if (pi.ActionCooldownSeconds > 0)
+                                {
+                                    <span>⏱️ Cooldown: @pi.ActionCooldownSeconds s</span>
+                                }
+                            </p>
+                        </div>
+                        <button class="btn btn-outline-danger"
+                                @onclick="() => Discard(pi.Id)"
+                                disabled="@isDeleting.Contains(pi.Id)">
+                            @(isDeleting.Contains(pi.Id) ? "…" : "Discard")
+                        </button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+@code {
+    private bool isLoading = true;
+    private List<PlayerItemResult> items = new();
+    private HashSet<int> isDeleting = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadInventoryAsync();
+    }
+
+    private async Task LoadInventoryAsync()
+    {
+        isLoading = true;
+        var result = await PlayerItemService.GetAllAsync(new PlayerItemFilter
+            {
+                PlayerId = Store.CurrentPlayerId
+            });
+        items = result.Data?.ToList() ?? new();
+        isLoading = false;
+    }
+
+    private async Task Discard(int playerItemId)
+    {
+        isDeleting.Add(playerItemId);
+        StateHasChanged();
+
+        await PlayerItemService.DeleteAsync(playerItemId);
+        // then refresh
+        await LoadInventoryAsync();
+    }
+}
