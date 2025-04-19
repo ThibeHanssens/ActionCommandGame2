@@ -8,13 +8,40 @@
 <h3>Positive Game Events</h3>
 <button class="btn btn-success mb-3" @onclick="New">+ New</button>
 
+<EditForm Model="current" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    @if (showForm)
+    {
+        <div class="card p-3 mb-3">
+            <div class="row g-2">
+                <div class="col">
+                    <InputText class="form-control" @bind-Value="current.Name" placeholder="Name" />
+                </div>
+                <div class="col">
+                    <InputNumber class="form-control" @bind-Value="current.Money" placeholder="Money" />
+                </div>
+                <div class="col">
+                    <InputNumber class="form-control" @bind-Value="current.Experience" placeholder="XP" />
+                </div>
+                <div class="col">
+                    <InputNumber class="form-control" @bind-Value="current.Probability" placeholder="Probability" />
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary ms-1" @onclick="Cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    }
+</EditForm>
+
 @if (loading)
 {
-     <p>Loading…</p>
+    <p>Loading…</p>
 }
 else
 {
-    <ul class="list-group">
+    <ul class="list-group mb-3">
         @foreach (var ev in events)
         {
             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -26,11 +53,19 @@ else
         }
     </ul>
 }
+
 @code {
     private bool loading;
+    private bool showForm;
+    private PositiveGameEventResult current = new() { Name = string.Empty };
     private List<PositiveGameEventResult> events = new();
 
     protected override async Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    private async Task Load()
     {
         loading = true;
         var res = await AdminService.GetAllPositiveAsync();
@@ -38,10 +73,24 @@ else
         loading = false;
     }
 
-    void New() {}
+    void New()
+    {
+        current = new PositiveGameEventResult { Name = string.Empty };
+        showForm = true;
+    }
+
+    void Cancel() => showForm = false;
+
+    async Task Save()
+    {
+        await AdminService.CreatePositiveAsync(current);
+        showForm = false;
+        await Load();
+    }
+
     async Task Delete(int id)
     {
         await AdminService.DeletePositiveAsync(id);
-        await OnInitializedAsync();
+        await Load();
     }
 }

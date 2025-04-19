@@ -8,13 +8,46 @@
 <h3>Negative Game Events</h3>
 <button class="btn btn-success mb-3" @onclick="New">+ New</button>
 
+<EditForm Model="current" OnValidSubmit="Save">
+    <DataAnnotationsValidator />
+    @if (showForm)
+    {
+        <div class="card p-3 mb-3">
+            <div class="row g-2">
+                <div class="col">
+                    <InputText class="form-control" @bind-Value="current.Name" placeholder="Name" />
+                </div>
+                <div class="col">
+                    <InputText class="form-control" @bind-Value="current.Description" placeholder="Description" />
+                </div>
+                <div class="col">
+                    <InputNumber class="form-control" @bind-Value="current.DefenseLoss" placeholder="Defense Loss" />
+                </div>
+                <div class="col">
+                    <InputText class="form-control" @bind-Value="current.DefenseWithGearDescription" placeholder="With Gear Desc." />
+                </div>
+                <div class="col">
+                    <InputText class="form-control" @bind-Value="current.DefenseWithoutGearDescription" placeholder="Without Gear Desc." />
+                </div>
+                <div class="col">
+                    <InputNumber class="form-control" @bind-Value="current.Probability" placeholder="Probability" />
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-primary">Save</button>
+                    <button type="button" class="btn btn-secondary ms-1" @onclick="Cancel">Cancel</button>
+                </div>
+            </div>
+        </div>
+    }
+</EditForm>
+
 @if (loading)
 {
     <p>Loading…</p>
 }
 else
 {
-    <ul class="list-group">
+    <ul class="list-group mb-3">
         @foreach (var ev in events)
         {
             <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -31,11 +64,24 @@ else
         }
     </ul>
 }
+
 @code {
     private bool loading;
+    private bool showForm;
+    private NegativeGameEventResult current = new()
+        {
+            Name = string.Empty,
+            DefenseWithGearDescription = string.Empty,
+            DefenseWithoutGearDescription = string.Empty
+        };
     private List<NegativeGameEventResult> events = new();
 
     protected override async Task OnInitializedAsync()
+    {
+        await Load();
+    }
+
+    private async Task Load()
     {
         loading = true;
         var res = await AdminService.GetAllNegativeAsync();
@@ -43,10 +89,29 @@ else
         loading = false;
     }
 
-    void New() {}
+    void New()
+    {
+        current = new NegativeGameEventResult
+            {
+                Name = string.Empty,
+                DefenseWithGearDescription = string.Empty,
+                DefenseWithoutGearDescription = string.Empty
+            };
+        showForm = true;
+    }
+
+    void Cancel() => showForm = false;
+
+    async Task Save()
+    {
+        await AdminService.CreateNegativeAsync(current);
+        showForm = false;
+        await Load();
+    }
+
     async Task Delete(int id)
     {
         await AdminService.DeleteNegativeAsync(id);
-        await OnInitializedAsync();
+        await Load();
     }
 }
