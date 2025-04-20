@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ActionCommandGame.Repository.Migrations
 {
     [DbContext(typeof(ActionCommandGameDbContext))]
-    [Migration("20250331204917_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20250420160702_InitialHikingAdventure")]
+    partial class InitialHikingAdventure
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -25,6 +25,8 @@ var app = builder.Build();
 //Initialize dbContext data
 using var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<ActionCommandGameDbContext>();
+//await dbContext.Database.MigrateAsync();
+//await dbContext.Initialize(); //Seed new data to database
 if (dbContext.Database.IsInMemory())
 {
     await dbContext.Initialize();

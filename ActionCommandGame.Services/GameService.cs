@@ -299,20 +299,19 @@ namespace ActionCommandGame.Services
                     return new List<ServiceMessage>{new ServiceMessage
                     {
                         Code = "ReloadedAttack",
-                        Message = $"You just broke {oldAttackItemName}. No worries, you swiftly wield a new {newAttackItem.Item.Name}. Yeah!",
-
+                        Message = $"Your {oldAttackItemName} are starting to smell. No worries, you swiftly put on freshly washed {newAttackItem.Item.Name}. Yeah!"
                     }};
                 }
 
                 return new List<ServiceMessage>{new ServiceMessage
                 {
                     Code = "NoAttack",
-                    Message = $"You just broke {oldAttackItemName}. This was your last tool. Bummer!",
+                    Message = $"You just broke {oldAttackItemName}. This was your last pair of shoes. Bummer!",
                     MessagePriority = MessagePriority.Warning
                 }};
             }
 
-            //If we don't have any attack tools, just consume more fuel in stead
+            //If we don't have any shoes, just consume more fuel in stead
             await ConsumeFuel(player);
 
             return new List<ServiceMessage>();
@@ -342,14 +341,14 @@ namespace ActionCommandGame.Services
                         return new List<ServiceMessage>{new ServiceMessage
                         {
                             Code = "ReloadedDefense",
-                            Message = $"Your {oldDefenseItemName} is starting to smell. No worries, you swiftly put on a freshly washed {newDefenseItem.Item.Name}. Yeah!"
+                            Message = $"You just broke {oldDefenseItemName}. No worries, you found a {newDefenseItem.Item.Name} in your backpack. Yeah!"
                         }};
                     }
 
                     return new List<ServiceMessage>{new ServiceMessage
                     {
                         Code = "NoAttack",
-                        Message = $"You just lost {oldDefenseItemName}. You continue without protection. Did I just see something move?",
+                        Message = $"You just lost {oldDefenseItemName}. You continue without gear. Watch out for technical parts!",
                         MessagePriority = MessagePriority.Warning
                     }};
                 }
@@ -369,17 +368,17 @@ namespace ActionCommandGame.Services
 
             if (!player.CurrentFuelPlayerItemId.HasValue)
             {
-                var infoText = "Playing without food is hard. You need a long time to recover. Consider buying food from the shop.";
+                var infoText = "Hiking without food is hard. You need a long time to recover. Consider buying food from the shop.";
                 serviceMessages.Add(new ServiceMessage { Code = "NoFood", Message = infoText, MessagePriority = MessagePriority.Warning });
             }
             if (!player.CurrentAttackPlayerItemId.HasValue)
             {
-                var infoText = "Playing without tools is hard. You lost extra fuel. Consider buying tools from the shop.";
+                var infoText = "Hiking without shoes is hard. You lost extra fuel. Consider buying shoes from the shop.";
                 serviceMessages.Add(new ServiceMessage { Code = "NoTools", Message = infoText, MessagePriority = MessagePriority.Warning });
             }
             if (!player.CurrentDefensePlayerItemId.HasValue)
             {
-                var infoText = "Playing without gear is hard. You lost extra fuel. Consider buying gear from the shop.";
+                var infoText = "Hiking without gear is hard. You lost extra fuel. Consider buying gear from the shop.";
                 serviceMessages.Add(new ServiceMessage { Code = "NoGear", Message = infoText, MessagePriority = MessagePriority.Warning });
             }
 

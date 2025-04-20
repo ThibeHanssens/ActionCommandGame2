@@ -22,7 +22,7 @@
 else
 {
     <div class="w-75 mx-auto mb-4 text-end balance-display">
-        <strong>Balance:</strong> €@player.Money
+        <strong>Savings:</strong> €@player.Money
     </div>
 
     @* Feedback *@
@@ -63,19 +63,19 @@ else
                                 }
                                 @if (item.Attack > 0)
                                 {
-                                    <span>Attack: @item.Attack</span>
+                                    <span>Balancing: @item.Attack</span>
                                     <br />
                                 }
                                 @if (item.Defense > 0)
                                 {
-                                    <span>Defense: @item.Defense</span>
+                                    <span>Support: @item.Defense</span>
                                     <br />
                                 }
                                 @if (item.ActionCooldownSeconds > 0)
                                 {
                                     var adjusted = Math.Ceiling(item.ActionCooldownSeconds
                                     / GameSettings.CooldownSpeedFactor);
-                                    <span>⏱️ Cooldown: @adjusted s</span>
+                                    <span>⏱️ Rest: @adjusted s</span>
                                 }
                             </p>
                             <button class="btn btn-primary mt-auto"
@@ -111,8 +111,8 @@ else
         Groups = new Dictionary<string, List<ItemResult>>
             {
                 ["Food"] = items.Where(x => x.Fuel > 0 && x.Name != "GOD MODE").ToList(),
-                ["Weapons"] = items.Where(x => x.Attack > 0 && x.Name != "GOD MODE").ToList(),
-                ["Armor"] = items.Where(x => x.Defense > 0 && x.Name != "GOD MODE").ToList(),
+                ["Shoes"] = items.Where(x => x.Attack > 0 && x.Name != "GOD MODE").ToList(),
+                ["Gear"] = items.Where(x => x.Defense > 0 && x.Name != "GOD MODE").ToList(),
                 ["Other"] = items.Where(x => (x.Fuel == 0 && x.Attack == 0 && x.Defense == 0) || x.Name == "GOD MODE").ToList()
             };
     }
