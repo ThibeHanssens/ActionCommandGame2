@@ -30,25 +30,29 @@
                     Inventory
                 </NavLink>
             </li>
+            <AuthorizeView Roles="SuperAdmin">
+                <li class="nav-item">
+                    <NavLink href="/admin" class="nav-link" Match="NavLinkMatch.All">
+                        <span class="oi oi-cog" aria-hidden="true"></span> Admin
+                    </NavLink>
+                </li>
+            </AuthorizeView>
         </ul>
-        <AuthorizeView Roles="SuperAdmin">
-            <li class="nav-item px-3">
-                <NavLink class="nav-link" href="/admin">
-                    <span class="oi oi-cog" aria-hidden="true"></span> Admin
-                </NavLink>
-            </li>
-        </AuthorizeView>
 
 
-        <ul class="nav-list">
+        <!-- right side nav -->
+        <ul class="nav-list align-items-center">
             <li class="nav-item">
-                <NavLink href="@AppRoutes.Account.Profile" class="profile-link">
+                <NavLink href="@AppRoutes.Account.Profile"
+                         class="nav-link profile-link d-inline-flex align-items-center px-2">
                     <img src="Images/profile.webp" class="profile-icon" alt="Profile" />
-                    <span class="profile-text">Profile</span>
+                    <span class="profile-text ms-1">Profile</span>
                 </NavLink>
             </li>
             <li class="nav-item">
-                <button class="btn btn-link profile-text" @onclick="Logout">Logout</button>
+                <button class="nav-link profile-link d-inline-flex align-items-center px-2" @onclick="Logout">
+                    <span class="profile-text">Logout</span>
+                </button>
             </li>
         </ul>
     </div>

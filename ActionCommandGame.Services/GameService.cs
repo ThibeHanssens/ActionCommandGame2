@@ -58,32 +58,36 @@ namespace ActionCommandGame.Services
                 };
             }
 
+            // 1) figure out base cooldown + speed‑factor
+            var cd = _gameSettings.DefaultCooldown;
+            if (player.CurrentFuelPlayerItemId.HasValue)
+                cd = player.CurrentFuelPlayerItem.Item.ActionCooldownSeconds;
+            cd = (int)(cd / _gameSettings.CooldownSpeedFactor);
+
+            // 2) still on cooldown?
             if (player.LastActionExecutedDateTime.HasValue)
             {
-	            var elapsedSeconds = DateTime.UtcNow.Subtract(player.LastActionExecutedDateTime.Value).TotalSeconds;
-	            var cooldownSeconds = _gameSettings.DefaultCooldown;
-
-                if (player.CurrentFuelPlayerItemId.HasValue)
+                var elapsed = (DateTime.UtcNow - player.LastActionExecutedDateTime.Value).TotalSeconds;
+                if (elapsed < cd)
                 {
-                    cooldownSeconds = player.CurrentFuelPlayerItem.Item.ActionCooldownSeconds;
-                }
-
-                if (elapsedSeconds < cooldownSeconds)
-                {
-                    //Save Player
-                    await _database.SaveChangesAsync();
-
-                    var waitSeconds = Math.Ceiling(cooldownSeconds - elapsedSeconds);
-                    var waitText = $"You are still a bit tired. You have to wait another {waitSeconds} seconds.";
-                    playerResult = await _playerService.Get(playerId);
+                    var wait = (int)Math.Ceiling(cd - elapsed);
+                    var text = $"You are still a bit tired. You have to wait another {wait} seconds.";
+                    var pr = await _playerService.Get(playerId);
                     return new ServiceResult<GameResult>
                     {
-                        Data = new GameResult { Player = playerResult.Data },
-                        Messages = new List<ServiceMessage> { new ServiceMessage { Code = "Cooldown", Message = waitText } }
+                        Data = new GameResult
+                        {
+                            Player = pr.Data,
+                            RemainingCooldownSeconds = wait
+                        },
+                        Messages = new[] {
+                    new ServiceMessage { Code = "Cooldown", Message = text }
+                }
                     };
                 }
             }
 
+            // 3) do the real turn
             player.LastActionExecutedDateTime = DateTime.UtcNow;
             
             var hasAttackItem = player.CurrentAttackPlayerItemId.HasValue;
@@ -163,7 +167,8 @@ namespace ActionCommandGame.Services
                 Player = playerResult.Data,
                 PositiveGameEvent = positiveGameEvent.Data,
                 NegativeGameEvent = negativeGameEvent.Data,
-                NegativeGameEventMessages = negativeGameEventMessages
+                NegativeGameEventMessages = negativeGameEventMessages,
+                RemainingCooldownSeconds = cd
             };
 
             var serviceResult = new ServiceResult<GameResult>

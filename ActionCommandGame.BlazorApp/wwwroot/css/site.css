@@ -260,3 +260,16 @@ html, body {
     .action-page h2{
         margin-bottom: 1.5rem;
     }
+
+/* ─── ELEMENT-SPECIFIC STYLING ───────────────────────────────── */
+.balance-display {
+    font-size: 1.5rem;
+}
+
+.btn-primary:disabled,
+.btn-primary.disabled {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: #e0e0e0 !important;
+    cursor: not-allowed;
+}

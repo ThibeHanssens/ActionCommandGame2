@@ -8,5 +8,6 @@ namespace ActionCommandGame.Services.Model.Results
         public PositiveGameEventResult? PositiveGameEvent { get; set; }
         public NegativeGameEventResult? NegativeGameEvent { get; set; }
         public IList<ServiceMessage> NegativeGameEventMessages { get; set; } = new List<ServiceMessage>();
+        public int? RemainingCooldownSeconds { get; set; }
     }
 }
