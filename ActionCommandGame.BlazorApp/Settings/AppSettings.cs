@@ -8,5 +8,6 @@ namespace ActionCommandGame.BlazorApp.Settings
         public string? CreatorName { get; set; }
         public string? Action { get; set; }
         public string? WelcomeText { get; set; }
+        public string? ActionText { get; set; }
     }
 }

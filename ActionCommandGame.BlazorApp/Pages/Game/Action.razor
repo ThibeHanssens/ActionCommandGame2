@@ -105,7 +105,7 @@ else
             Messages.Add(new ServiceMessage
                 {
                     Code = "PositiveEvent",
-                    Message = pe.Name + (string.IsNullOrEmpty(pe.Description) ? "" : $": {pe.Description}")
+                    Message = $"{AppSettings.Value.ActionText}{pe.Name}" + (string.IsNullOrEmpty(pe.Description) ? "" : $": {pe.Description}")
                 });
             if (pe.Money > 0)
                 Messages.Add(new ServiceMessage
