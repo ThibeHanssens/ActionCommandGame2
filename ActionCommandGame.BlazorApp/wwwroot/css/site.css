@@ -3,7 +3,7 @@ html, body {
     margin: 0;
     padding: 0;
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    background: #1f1310; /* deep mine‑shaft brown */
+    background: #0f1e10; /* deep forest green */
     color: #e0e0e0;
 }
 
@@ -13,27 +13,28 @@ html, body {
     flex-direction: column;
     min-height: 100vh;
 }
+
     .minimal-layout .content {
         flex: 1;
     }
 
     .minimal-layout .header {
-        background: #3c2b1e; /* dark earthy brown */
+        background: #1e301e; /* dark forest green */
         padding: 1rem 0;
-        border-bottom: 2px solid #5a442e;
+        border-bottom: 2px solid #3a553a;
     }
 
     .minimal-layout .site-title {
         margin: 0;
         text-align: center;
         font-family: Georgia, serif;
-        color: #d4af37; /* metallic gold accent */
+        color: #9acd32; /* light green accent */
     }
 
-/* ensure your little “login/register here” link is gold */
+/* ensure your little “login/register here” link is accent green */
 .login-page small a,
 .register-page small a {
-    color: #d4af37;
+    color: #9acd32;
     text-decoration: none;
 }
 
@@ -48,30 +49,30 @@ html, body {
     flex-direction: column;
     min-height: 100vh;
 }
+
     .main-layout .content {
         flex: 1;
     }
 
     .main-layout .header {
-        background: linear-gradient(135deg, #4b3728, #2f1e16);
+        background: linear-gradient(135deg, #264d26, #173217);
         padding: 1rem 0;
-        border-bottom: 2px solid #5a442e;
+        border-bottom: 2px solid #3a553a;
     }
 
     .main-layout .site-title {
         margin: 0;
         text-align: center;
         font-family: Georgia, serif;
-        color: #d4af37;
+        color: #9acd32;
     }
 
 /* ─── NAV MENU ─────────────────────────────────────────────────── */
 .navmenu {
-    background: linear-gradient(135deg, #4b3728, #2f1e16);
-    /*background: #3c2b1e;*/
+    background: linear-gradient(135deg, #264d26, #173217);
     padding: 0.5rem 0;
-    border-top: 2px solid #5a442e;
-    border-bottom: 2px solid #5a442e;
+    border-top: 2px solid #3a553a;
+    border-bottom: 2px solid #3a553a;
 }
 
 .nav-inner {
@@ -101,16 +102,15 @@ html, body {
 
         .nav-list .nav-link:hover,
         .nav-list .nav-link.active {
-            /* no underline */
             text-decoration: none;
-            color: #d4af37;
+            color: #9acd32;
             background: transparent;
         }
 
 /* ─── FOOTER ───────────────────────────────────────────────────── */
 .footer {
     padding: 1rem 0;
-    color: #ffffff; /* pure white text */
+    color: #ffffff;
 }
 
     /* container that holds left+right */
@@ -120,16 +120,15 @@ html, body {
         align-items: center;
     }
 
-/* dark‑brown band to match nav/header */
+/* dark‑green band to match nav/header */
 .minimal-layout .footer {
-    background: #3c2b1e;
-    border-top: 2px solid #5a442e;
+    background: #1e301e;
+    border-top: 2px solid #3a553a;
 }
 
 .main-layout .footer {
-    /* same gradient as your header */
-    background: linear-gradient(135deg, #4b3728, #2f1e16);
-    border-top: 2px solid #5a442e;
+    background: linear-gradient(135deg, #264d26, #173217);
+    border-top: 2px solid #3a553a;
 }
 
 .footer-left,
@@ -145,11 +144,13 @@ html, body {
     align-items: center;
     text-decoration: none;
 }
+
     .profile-link:hover,
     .profile-link:focus,
     .profile-link:visited {
         text-decoration: none;
     }
+
     .profile-link:focus {
         outline: none;
     }
@@ -164,7 +165,7 @@ html, body {
 }
 
 .profile-link:hover .profile-icon {
-    border-color: #d4af37;
+    border-color: #9acd32;
 }
 
 .profile-text {
@@ -176,7 +177,7 @@ html, body {
 }
 
 .profile-link:hover .profile-text {
-    color: #d4af37;
+    color: #9acd32;
     text-decoration: none;
 }
 
@@ -206,7 +207,7 @@ html, body {
 .loading-percentage {
     font-weight: bold;
     font-size: 1.25rem;
-    color: #d4af37;
+    color: #9acd32;
 }
 
     .loading-percentage::after {
@@ -216,26 +217,26 @@ html, body {
 
 /* ─── BUTTONS ─────────────────────────────────────────────────── */
 .btn-primary {
-    background-color: #d4af37;
-    border-color: #c0a130;
-    color: #1f1310;
+    background-color: #9acd32;
+    border-color: #7aa729;
+    color: #0f1e10;
 }
 
     .btn-primary:hover,
     .btn-primary:focus {
-        background-color: #c0a130;
-        border-color: #a88f2e;
+        background-color: #7aa729;
+        border-color: #5f8520;
     }
 
 .btn-secondary {
-    color: #d4af37;
+    color: #9acd32;
     background: transparent;
-    border: 1px solid #d4af37;
+    border: 1px solid #9acd32;
 }
 
     .btn-secondary:hover {
-        background-color: #d4af37;
-        color: #1f1310;
+        background-color: #9acd32;
+        color: #0f1e10;
     }
 
 /* ─── PAGE‑SPECIFIC CONTAINERS ───────────────────────────────── */
@@ -245,7 +246,7 @@ html, body {
 .profile-page,
 .player-selection-page,
 .shop-page,
-.action-page{
+.action-page {
     max-width: 600px;
     margin: 3rem auto;
     text-align: center;
@@ -257,7 +258,7 @@ html, body {
     .profile-page h2,
     .player-selection-page h2,
     .shop-page h2,
-    .action-page h2{
+    .action-page h2 {
         margin-bottom: 1.5rem;
     }
 
