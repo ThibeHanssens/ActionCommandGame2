@@ -1,4 +1,4 @@
-﻿namespace ActionCommandGame.Services.Settings
+﻿namespace ActionCommandGame.Settings
 {
     public class GameSettings
     {

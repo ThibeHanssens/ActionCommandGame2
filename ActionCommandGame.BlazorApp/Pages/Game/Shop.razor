@@ -6,10 +6,12 @@
 @using ActionCommandGame.Services.Model.Results
 @using ActionCommandGame.Services.Model.Filters
 @using ActionCommandGame.BlazorApp.Stores
+@using ActionCommandGame.Settings
 @inject ItemService ItemService
 @inject GameService GameService
 @inject PlayerService PlayerService
 @inject MemoryStore Store
+@inject ActionCommandGame.Settings.GameSettings GameSettings
 
 <h2 class="text-center mb-4">Shop</h2>
 
@@ -57,18 +59,23 @@ else
                                 @if (item.Fuel > 0)
                                 {
                                     <span>Fuel: @item.Fuel</span>
-
                                     <br />
                                 }
                                 @if (item.Attack > 0)
                                 {
                                     <span>Attack: @item.Attack</span>
-
                                     <br />
                                 }
                                 @if (item.Defense > 0)
                                 {
                                     <span>Defense: @item.Defense</span>
+                                    <br />
+                                }
+                                @if (item.ActionCooldownSeconds > 0)
+                                {
+                                    var adjusted = Math.Ceiling(item.ActionCooldownSeconds
+                                    / GameSettings.CooldownSpeedFactor);
+                                    <span>⏱️ Cooldown: @adjusted s</span>
                                 }
                             </p>
                             <button class="btn btn-primary mt-auto"

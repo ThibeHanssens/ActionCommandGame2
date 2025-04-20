@@ -1,5 +1,5 @@
 ﻿using ActionCommandGame.Api.Installers.Abstractions;
-using ActionCommandGame.Services.Settings;
+using ActionCommandGame.Settings;
 
 namespace ActionCommandGame.Api.Installers
 {

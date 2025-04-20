@@ -5,7 +5,8 @@ using ActionCommandGame.Services.Abstractions;
 using ActionCommandGame.Services.Extensions;
 using ActionCommandGame.Services.Model.Core;
 using ActionCommandGame.Services.Model.Results;
-using ActionCommandGame.Services.Settings;
+//using ActionCommandGame.Services.Settings;
+using ActionCommandGame.Settings;
 using Microsoft.EntityFrameworkCore;
 
 namespace ActionCommandGame.Services

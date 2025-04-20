@@ -8,6 +8,7 @@
 @using ActionCommandGame.BlazorApp.Stores
 @inject PlayerItemService PlayerItemService
 @inject MemoryStore Store
+@inject ActionCommandGame.Settings.GameSettings GameSettings
 
 <h2 class="text-center mb‑4">Inventory</h2>
 
@@ -54,7 +55,9 @@ else
                                 }
                                 @if (pi.ActionCooldownSeconds > 0)
                                 {
-                                    <span>⏱️ Cooldown: @pi.ActionCooldownSeconds s</span>
+                                    var adjusted = Math.Ceiling(pi.ActionCooldownSeconds
+                                    / GameSettings.CooldownSpeedFactor);
+                                    <span>⏱️ Cooldown: @adjusted s</span>
                                 }
                             </p>
                         </div>

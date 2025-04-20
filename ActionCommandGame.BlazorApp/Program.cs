@@ -11,11 +11,14 @@ using ActionCommandGame.BlazorApp.Services;
 using Blazored.LocalStorage;
 using ActionCommandGame.Sdk.Abstractions;
 using static ActionCommandGame.BlazorApp.Services.PlayerService;
+using ActionCommandGame.Settings;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 
 // Ensure the appsettings.json file from wwwroot is added to the configuration
 builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+// Ensure the GameSettings.cs file from ActionCommandGame.Settings is added to the configuration
+builder.Services.AddSingleton(new GameSettings());
 
 // Add root components: the App component and the HeadOutlet for <head> modifications.
 builder.RootComponents.Add<App>("#app");
